@@ -1,0 +1,349 @@
+﻿@model DataSense_UI.Models.ViewModels.SearchPatternViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .error {
+        color: red;
+    }
+
+    /*.pagination {
+        display: inline-block;
+    }
+
+        .pagination a {
+            color: #2399ff;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+            border: 1px solid #ddd;
+        }
+
+            .pagination a.active {
+                background-color: #4CAF50;
+                color: white;
+                border: 1px solid #4CAF50;
+            }
+
+            .pagination a:hover:not(.active) {
+                background-color: #ddd;
+            }*/
+
+    .bd-example-modal-lg .modal-dialog{
+    display: table;
+    position: relative;
+    margin: 0 auto;
+    top: calc(50% - 24px);
+  }
+
+  .bd-example-modal-lg .modal-dialog .modal-content{
+    background-color: transparent;
+    border: none;
+  }
+    .loader {
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        border-bottom: 16px solid #3498db;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
+
+    @@-webkit-keyframes spin {
+        0% {
+            -webkit-transform: rotate(0deg);
+        }
+
+        100% {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+<script type="text/javascript">
+    function searchserver() {
+        var txtserver = document.getElementById("ss-name-filterserver").value;
+        window.location.href = "/SearchPattern/Index?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=1&pageSize=@(Model.pageSize)&Search=" + txtserver + "&sortby=@(Model.sortby)";
+    }
+    $(document).ready(function () {
+
+        $('#ss-name-filterserver').on('change', function () {
+            window.location.href = "/SearchPattern/Index?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=1&pageSize=@(Model.pageSize)&Search=" + $(this).val() + "&sortby=@(Model.sortby)";
+        });
+        $('#select_all').on('click', function () {
+            if (this.checked) {
+                $('.checkbox').each(function () {
+                    this.checked = true;
+                });
+            } else {
+                $('.checkbox').each(function () {
+                    this.checked = false;
+                });
+            }
+        });
+
+        $('.checkbox').on('click', function () {
+            if ($('.checkbox:checked').length == $('.checkbox').length) {
+                $('#select_all').prop('checked', true);
+            } else {
+                $('#select_all').prop('checked', false);
+            }
+        });
+    });
+    var timerId;
+    function ProcessFile(CredId, dataSetIndexId, dataSetId) {
+        $('#modal').modal('show');
+        $('.loader').css("display", "block");
+
+        $.ajax({
+            type: "GET",
+            url: "/SearchPattern/ProcessFile?CredId=" + CredId + "&dataSetIndexId=" + dataSetIndexId + "&dataSetId=" + dataSetId,
+            contentType: "application/json",
+            dataType: "json",
+            async: false,
+            success: function (Data) {
+                if (Data != "" && Data != null) {
+                    timerId = setTimeout(FileChekingProcess, 10000, Data);
+                }
+            }
+        });
+    }
+    function FileChekingProcess(FileId) {
+        $.ajax({
+            type: "GET",
+            url: "/SearchPattern/FileChekingProcess?FileId=" + FileId,
+            contentType: "application/json",
+            dataType: "json",
+            async: false,
+            success: function (Data) {
+                if (Data != "" && Data != null) {
+                    $('#modal').modal('hide');
+                    $('.loader').css("display", "none");
+                    $('#DownloadFile').css("display", "block");
+                    clearTimeout(timerId);
+                }
+            }
+        });
+    }
+</script>
+@using (Html.BeginForm("MarkReviewed", "SearchPattern", FormMethod.Post, new { @class = "container-fluid h-100 main_app", role = "form" }))
+{
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/DataSet" title="Data Sets">Data Sets</a> / </li>
+                    <li> <a href="/DataSetIndex/Index?id=@Model.dataSetId" title="View Indexes"> @Model.DataSetName </a> / </li>
+                    <li> <a href="/ViewMachines/Index?dataSetIndexId=@Model.dataSetIndexId&dataSetId=@Model.dataSetId" title="View Indexes"> View Machines </a> / </li>
+                    <li> Search Pattern </li>
+                </ul>
+            </div>
+            <div>
+                <input type="hidden" value="@Model.dataSetIndexCredId" name="CredId" />
+                <input type="hidden" value="@Model.dataSetIndexId" name="dataSetIndexId" />
+                <input type="hidden" value="@Model.dataSetId" name="dataSetId" />
+                <button type="submit" class="save_btn sav_selet" style="margin-left:15px;">Mark as Reviewed</button>
+                <button type="button" class="save_btn sav_selet" onclick="location.href = '/SearchPattern/Reviewed?CredId=@Model.dataSetIndexCredId&dataSetIndexId=@Model.dataSetIndexId&dataSetId=@Model.dataSetId';">View Reviewed</button>
+                <button type="button" class="save_btn sav_selet" data-toggle="modal" data-target="#myModal"> Process File </button>
+            </div>
+            <div class="form-group" style="margin: 25px;">
+                <div class="form_h4 error">
+                    @if (!string.IsNullOrEmpty(Convert.ToString(ViewBag.msg)))
+                    {
+                        @ViewBag.msg
+                    }
+                </div>
+            </div>
+            <div class="sort_by mt-0">
+                <div class="search_box ml-0">
+                    <input type="text" class="serch" id="ss-name-filterserver" value="@Model.Search">
+                    <button type="button" class="search_btn" onclick="searchserver();"></button>
+                </div>
+                @if (Model.pagingHeaders.TotalPages > 1)
+                {
+                    <div class="add_data">
+                        <div class="mt-3"> Records: <b>@(Model.PatternRecViewSvc.Count() * Model.pagingHeaders.CurrentPage)</b> out of @Model.pagingHeaders.TotalCount </div>
+                    </div>
+                }
+            </div>
+            @if (Model.pagingHeaders.TotalPages > 1)
+            {
+                <div class="sort_by mt-0 pt-0">
+                    <div class="sort">
+                        <div class="dropdown">
+                            <a type="button" class="btn dropdown-toggle border" data-toggle="dropdown" style="font-size:12px"> @Model.pageSize rows per page </a>
+                            <div class="dropdown-menu" style="font-size:12px">
+                                <a class="dropdown-item" href="/SearchPattern/Index?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=1&pageSize=10&Search=@(Model.Search)&sortby=@(Model.sortby)">10 rows per page</a>
+                                <a class="dropdown-item" href="/SearchPattern/Index?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=1&pageSize=20&Search=@(Model.Search)&sortby=@(Model.sortby)">20 items per page</a>
+                                <a class="dropdown-item" href="/SearchPattern/Index?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=1&pageSize=50&Search=@(Model.Search)&sortby=@(Model.sortby)">50 items per page</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="modal fade api_modal" id="myModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="api_body" style="padding:12px;">
+                            <button type="button" class="close" data-dismiss="modal">x</button>
+                        </div>
+                        
+                        <div class="loader" style="position:absolute;left:25%;z-index:999999;margin: 30px;display:none;"></div>
+                        @if (!string.IsNullOrEmpty(Model.objResponseGetLatestFile.fileName))
+                        {
+                            <button id="DownloadFile" type="button" class="save_btn sav_selet" style="margin:15px;" onclick="location.href = '/SearchPattern/DownloadFile?CredId=@Model.dataSetIndexCredId&dataSetIndexId=@Model.dataSetIndexId&dataSetId=@Model.dataSetId';">Download File</button>
+                        }
+                        else
+                        {
+                            <button id="DownloadFile" type="button" class="save_btn sav_selet" style="margin:15px;display:none;" onclick="location.href = '/SearchPattern/DownloadFile?CredId=@Model.dataSetIndexCredId&dataSetIndexId=@Model.dataSetIndexId&dataSetId=@Model.dataSetId';">Download File</button>
+                        }
+                        <button type="button" class="save_btn sav_selet" style="margin:15px;" onclick="ProcessFile(@Model.dataSetIndexCredId,@Model.dataSetIndexId,@Model.dataSetId)">Process File</button>
+                    </div>
+                </div>
+            </div>
+            @if (Model.pagingHeaders.TotalPages > 1)
+            {
+                <div class="w-100 float-left p-3">
+                    <ul class="pagination">
+                        @if (Model.pagingHeaders.PreviousPage == "Yes")
+                        {
+                            <li class="page-item"><a class="page-link" href="/SearchPattern/Index?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(Model.pagingHeaders.CurrentPage - 1)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby)">Previous</a></li>
+                        }
+                        @{
+                            var startPage = Model.pagingHeaders.CurrentPage - 5;
+                            var endPage = Model.pagingHeaders.CurrentPage + 4;
+                            if (startPage <= 0)
+                            {
+                                endPage -= (startPage - 1);
+                                startPage = 1;
+                            }
+                            if (endPage > Model.pagingHeaders.TotalPages)
+                            {
+                                endPage = Model.pagingHeaders.TotalPages;
+                                if (endPage > 10)
+                                {
+                                    startPage = endPage - 9;
+                                }
+                            }
+                        }
+                        @for (var page = startPage; page <= endPage; page++)
+                        {
+                            <li class="page-item @(Model.pagingHeaders.CurrentPage == page ? "active" : "")">
+                                <a class="page-link" href="/SearchPattern/Index?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(page)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby)">@page</a>
+                            </li>
+                        }
+
+                        @if (Model.pagingHeaders.NextPage == "Yes")
+                        {
+                            <li class="page-item"><a class="page-link" href="/SearchPattern/Index?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(Model.pagingHeaders.CurrentPage + 1)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby)">Next</a></li>
+                        }
+                    </ul>
+                </div>
+            }
+            <div class="list_main chk_box_hr" style="padding-bottom:25px;">
+                <div class="common_list list_headimng">
+                    <div class="data_name" style="width:3%;"><label class="select_m"><input type="checkbox" id="select_all" /><span class="checkmark"></span></label></div>
+                    <div class="data_name" style="width:10%;" id="ss-sortserver"><a href="/SearchPattern/Index?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby=="datecreated" ? "datecreated_desc":"datecreated")"> Date Created </a></div>
+                    <div class="data_name" style="width:30%;"> <a href="/SearchPattern/Index?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby=="patternfound" ? "patternfound_desc":"patternfound")">Pattern Found </a></div>
+                    <div class="data_name" style="width:30%;"> <a href="/SearchPattern/Index?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby=="where" ? "where_desc":"where")">Where  </a></div>
+                    <div class="actions" style="width:27%;"> <a href="/SearchPattern/Index?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby=="previewtext" ? "previewtext_desc":"previewtext")">PreviewText </a></div>
+                </div>
+                @if (Model.PatternRecViewSvc.Count == 0)
+                {
+                    <div class="common_list" style="padding-left:15px;">
+                        No Data found.
+                    </div>
+                }
+                <div class="ss-boxservers">
+                    @foreach (var item in Model.PatternRecViewSvc)
+                    {
+                        <div class="common_list chk_box_hr" style="padding-left:12px;" data-name="@item.fileName">
+                            <div class="data_name" style="width:3%;">
+                                <label class="select_m"><input type="checkbox" class="checkbox" name="chkMarkReview" value="@item.fileName" /><span class="checkmark"></span></label>
+                            </div>
+                            <div class="data_name" style="width:10%;">
+                                @item.createdOn
+                            </div>
+                            <div class="data_name" style="width:30%;">
+                                @if (item.patternRegEx.dataTypeDesc == null)
+                                {
+                                    @Html.Raw("&nbsp;")
+                                }
+                                else
+                                {
+                                    @Html.Raw(item.patternRegEx.dataTypeDesc)
+                                }
+                            </div>
+                            <div class="data_LU_table" style="width:30%;">@item.fileName</div>
+                            <div class="actions" style="width:27%;">@item.previewText.Replace("/r/n", "")</div>
+                        </div>
+                    }
+                </div>
+                    @if (Model.pagingHeaders.TotalPages > 1)
+                    {
+                        <div class="w-100 float-left p-3">
+                            <ul class="pagination">
+                                @if (Model.pagingHeaders.PreviousPage == "Yes")
+                                {
+                                    <li class="page-item"><a class="page-link" href="/SearchPattern/Index?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(Model.pagingHeaders.CurrentPage - 1)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby)">Previous</a></li>
+                                }
+                                @{
+                                    var startPage1 = Model.pagingHeaders.CurrentPage - 5;
+                                    var endPage1 = Model.pagingHeaders.CurrentPage + 4;
+                                    if (startPage1 <= 0)
+                                    {
+                                        endPage1 -= (startPage1 - 1);
+                                        startPage1 = 1;
+                                    }
+                                    if (endPage1 > Model.pagingHeaders.TotalPages)
+                                    {
+                                        endPage1 = Model.pagingHeaders.TotalPages;
+                                        if (endPage1 > 10)
+                                        {
+                                            startPage1 = endPage1 - 9;
+                                        }
+                                    }
+                                }
+                                @for (var page = startPage1; page <= endPage1; page++)
+                                {
+                                    <li class="page-item @(Model.pagingHeaders.CurrentPage == page ? "active" : "")">
+                                        <a class="page-link" href="/SearchPattern/Index?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(page)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby)">@page</a>
+                                    </li>
+                                }
+
+                                @if (Model.pagingHeaders.NextPage == "Yes")
+                                {
+                                    <li class="page-item"><a class="page-link" href="/SearchPattern/Index?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(Model.pagingHeaders.CurrentPage + 1)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby)">Next</a></li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+        </div>
+    </div>
+}
+<div class="modal fade bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1" id="modal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="width: 48px">
+            <span class="fa fa-spinner fa-spin fa-3x"></span>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/bootstrap.min.js"></script>
+@*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>*@

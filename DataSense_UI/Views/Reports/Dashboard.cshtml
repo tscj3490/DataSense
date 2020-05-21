@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model DataSense_UI.Models.ViewModels.ReportsViewModel
+
+@{
+    ViewBag.Title = "ReportDashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid h-100 main_app">
+    <div class="row">
+
+
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+
+
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <h3> Reports </h3>
+            </div>
+            <div class="dasboard-report">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="o-report">
+                            <div class="icon_o-report position-relative"> <span class="icon_normal"> <img src="/images/reportsearch.svg" style="width:80px;"> </span> <span class="icon_hover"> <img src="/images/reportsearch_hover.svg" style="width:80px;"> </span> </div>
+                            <h2 class="o-report-heading">
+                                Asset Inverntory <br>
+                                Report
+                            </h2>
+                            <a href="/Reports/AssetsInventoryReport" class="read-more"> Read more </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="o-report">
+                            <div class="icon_o-report position-relative"> <span class="icon_normal"> <img src="/images/pii-1.svg" style="width:80px;"> </span> <span class="icon_hover"> <img src="/images/pii-1_hover.svg" style="width:80px;"> </span> </div>
+                            <h2 class="o-report-heading"> PII Summary Report </h2>
+                            <a href="/Reports/PIISummaryReport" class="read-more"> Read more </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="o-report">
+                            <div class="icon_o-report position-relative"> <span class="icon_normal"> <img src="/images/database1.svg" style="width:80px;"> </span> <span class="icon_hover"> <img src="/images/database_hover.svg" style="width:80px;"> </span> </div>
+                            <h2 class="o-report-heading">
+                                PII Accumulation <br>
+                                Reportt
+                            </h2>
+                            <a href="/Reports/PIIAccumulationReport" class="read-more"> Read more </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="o-report">
+                            <div class="icon_o-report position-relative"> <span class="icon_normal"> <img src="/images/risk.svg" style="width:80px;"> </span> <span class="icon_hover"> <img src="/images/risk_hover.svg" style="width:80px;"> </span> </div>
+                            <h2 class="o-report-heading">
+                                High Risk Point <br>
+                                Report
+                            </h2>
+                            <a href="/Reports/HighRiskAssetsReport" class="read-more"> Read more </a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+

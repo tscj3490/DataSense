@@ -1,0 +1,95 @@
+﻿@model DataSense_UI.Models.ViewModels.DataSetViewModel
+
+
+<script>
+    $(document).ready(function () {
+        var test = new simpleSort('.ss-box', 'div');
+        $('#ss-sort').on('click', function () {
+            if (test.order === 'desc') {
+                test.sort('data-name', 'asc');
+            } else {
+                test.sort('data-name', 'desc');
+            }
+        });
+
+        $('#ss-all').on('click', function () {
+            test.all();
+        });
+
+        $('#ss-name-filter').on('propertychange change keyup paste input mouseup', function () {
+            test.filter('data-name', $(this).val());
+        });
+
+        $('#ss-sort').click();
+    });
+</script>
+
+<div class="container-fluid h-100 main_app">
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <h3> Data Sets </h3>
+            </div>
+            <div class="sort_by">
+                <div class="sort">
+                    <span class="labl_sort"> Sort by: </span>
+                    <ul class="sort_ul">
+                        <li><a href="#" title="Name" class="active" id="ss-sort">Name</a></li>
+                       
+                    </ul>
+                </div>
+                <div class="search_box">
+                    <input type="text" class="serch"  id="ss-name-filter">
+                    <button type="submit" class="search_btn"></button>
+                </div>
+                <div class="add_data">
+
+                    @*<button type="button" class="add_data_btn" onclick="document.location.href='@Url.Content("/DataSet/Add")';" >*@
+                    <a class="add_data_btn" href="@Url.Content("/DataSet/Add")" style="text-decoration:none;">
+                        <span>+</span> Add Data Set
+                    </a>
+                    @*</button>*@
+
+                </div>
+            </div>
+            <div class="list_main">
+                <div class="common_list list_headimng">
+                    <div class="data_name"> Data Set Name </div>
+                    <div class="data_LU_table">Data Set Look Up table </div>
+                    <div class="created_by">Created By </div>
+                    <div class="created_on"> Created On</div>
+                    <div class="vw_index"></div>
+                    <div class="actions"> Actions </div>
+                </div>
+                @if (Model.dataSets.Count == 0)
+                {
+                    <div class="common_list">
+                        No Datasets found.
+                    </div>
+                }
+                <div class="ss-box">
+                    @foreach (DataSense_UI.Models.DTO.DataSetResp ds in Model.dataSets)
+                    {
+                    <div class="common_list" data-name="@ds.dataSetName | @ds.dataSetLookUpTable | @ds.createdByUser">
+                        <div class="data_name"><a href="@Url.Content("/DataSet/Edit?id="+ ds.id)" title="@ds.dataSetName"> @ds.dataSetName</a> </div>
+                        <div class="data_LU_table">@ds.dataSetLookUpTable</div>
+                        @if (ds.createdByUser == null)
+    {
+                    <div class="created_by">&nbsp;</div>
+}
+else
+{
+                    <div class="created_by"><a href="#" title="@ds.createdByUser"> @ds.createdByUser</a></div>
+}
+
+                        <div class="created_on"> @ds.createdOn</div>
+                        <div class="vw_index"> <a href="/DataSetIndex/Index?id=@ds.id" title="View Indexes">View Indexes</a> </div>
+                        <div class="actions"> <a href="@Url.Content("/DataSet/Edit?id="+ ds.id)" title="edit" class="edit_a"><img src="/images/edit.svg"></a>  </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

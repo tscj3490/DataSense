@@ -1,0 +1,35 @@
+﻿@model DataSense_UI.Models.ViewModels.MachinesNotificationsViewModel
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Post", "MachineNotification", FormMethod.Post, new { @class = "container-fluid h-100 main_app", role = "form", autocomplete = "off" }))
+{
+    <div class="container-fluid h-100 main_app">
+        <div class="row">
+            @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+            <div class="col-lg-10 rt_main">
+                <div class="heading_top">
+                    <ul class="pagination_ul">
+                        <li> <a href="/DataSet" title="Data Set "> Data Sets </a> / </li>
+                        <li> <a href="/DataSetIndex/Index?id=@ViewBag.dataSetId" title="View Indexes"> @Model.DataSetName</a> / </li>
+                        <li> Add View Emails </li>
+                    </ul>
+                </div>
+                <div class="edit_form">
+                    <div class="form-group">
+                        <label class="name_lbl text2"> Emails </label>
+                        <input type="hidden" name="credId" id="credId" value="@ViewBag.credId"/>
+                        <input type="hidden" name="dataSetId" id="dataSetId" value="@ViewBag.dataSetId" />
+                        <input type="hidden" name="dataSetIndexId" id="dataSetIndexId" value="@ViewBag.dataSetIndexId" />
+                        @Html.TextBoxFor(m => m.notificationPost.emailTo, new { Value = "", @class = "form-control", autocapitalize = "none" })
+                    </div>
+                    <div class="btns">
+                        <button type="submit" class="save_btn">Save</button>
+                        <button type="button" class="cancel_btn" onclick="location.href = '/MachineNotification/Index?credId=@ViewBag.credId&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId';">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

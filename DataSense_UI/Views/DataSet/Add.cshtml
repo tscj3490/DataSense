@@ -1,0 +1,44 @@
+﻿@model DataSense_UI.Models.ViewModels.DataSetViewModel
+@{
+    ViewBag.Title = "Add data set";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Post", "DataSet", FormMethod.Post, new { @class = "container-fluid h-100 main_app", role = "form" }))
+{
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/DataSet" title="Data Sets">Data Sets</a> / </li>
+                    <li> Add data set </li>
+                </ul>
+            </div>
+            <div class="twitter_data_hd">
+                <h2 class="heading_in"> Data Sets </h2>
+            </div>
+            <div class="edit_form">
+                <div class="form-group">
+                    <label class="name_lbl"> Data Set Name </label>
+                    @Html.TextBoxFor(m => m.dataSetPost.dataSetName, new { @class = "form-control", maxlength = "50", required = "required", autocapitalize = "none" })
+                    @Html.ValidationMessageFor(m => m.dataSetPost.dataSetName)
+                </div>
+                <div class="form-group">
+                    <label class="name_lbl"> Data Set Look Up table </label>
+                    @Html.TextBoxFor(m => m.dataSetPost.dataSetLookUpTable, new { @class = "form-control", maxlength = "100", required = "required", autocapitalize = "none" })
+                    @Html.ValidationMessageFor(m => m.dataSetPost.dataSetLookUpTable)
+                </div>
+                <div class="form-group">
+                    <label class="name_lbl"> Active </label><br />
+                    @Html.CheckBoxFor(m => m.dataSetPost.active, new { })
+                </div>
+
+                <div class="btns">
+                    <button type="submit" class="save_btn">Save</button>
+                    <button type="button" class="cancel_btn" onclick="location.href = '/DataSet/Index';">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,303 @@
+﻿@model DataSense_UI.Models.ViewModels.PIISummaryViewModel
+
+@{
+    ViewBag.Title = "PIISummaryReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid h-100 main_app">
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+
+
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <h3> PII Summary Report  </h3>
+            </div>
+            <div>
+
+                <div class="sort_by d-flex">
+                    <div class="sort d-flex mr-3">
+                        <span class="labl_sort"> Dataset: </span>
+                        <div class="dropdown">
+                            <a type="button" class="btn dropdown-toggle border" data-toggle="dropdown" style="font-size:12px; min-width:100px;"> Select </a>
+                            <div class="dropdown-menu" style="font-size:12px">
+                                @foreach (DataSense_UI.Models.DTO.DataSetResp dataSet in Model.datasetLists)
+                                {
+                                    <a class="dropdown-item" href="#">@dataSet.dataSetName</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sort d-flex mr-3">
+                        <span class="labl_sort"> Environment: </span>
+                        <div class="dropdown">
+                            <a type="button" class="btn dropdown-toggle border" data-toggle="dropdown" style="font-size:12px; min-width:100px;"> Select </a>
+                            <div class="dropdown-menu">
+                                <div class="chk_box_hr d-flex flex-column chekbox_13">
+                                    @*@foreach (DataSense_UI.Models.DTO.DataSetIndexView dataSetByDatasetId in Model.dataSetIndexViewList)
+                                    {
+                                        <div class="form-check">
+                                            <div class="checkbox_main">
+                                                <label class="select_m">
+                                                    <span class="chkbox_txt">@dataSetByDatasetId.dataSetColumns</span>
+                                                    <input type="checkbox">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    }*@
+                                </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sort d-flex mr-3">
+                                <span class="labl_sort"> PII: </span>
+                                <div class="dropdown">
+                                    <a type="button" class="btn dropdown-toggle border" data-toggle="dropdown" style="font-size:12px; min-width:100px;"> Select </a>
+                                    <div class="dropdown-menu">
+                                        <div class="chk_box_hr d-flex flex-column chekbox_13">
+                                            <div class="form-check">
+
+                                                <div class="checkbox_main">
+                                                    <label class="select_m">
+                                                        <span class="chkbox_txt">   Select All   </span>
+                                                        <input type="checkbox">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-check">
+
+
+
+
+                                                <div class="checkbox_main">
+                                                    <label class="select_m">
+                                                        <span class="chkbox_txt"> Social Security  </span>
+                                                        <input type="checkbox">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-check">
+
+                                                <div class="checkbox_main">
+                                                    <label class="select_m">
+                                                        <span class="chkbox_txt">  Bsr Dates   </span>
+                                                        <input type="checkbox">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+
+
+
+                                            <div class="form-check">
+
+                                                <div class="checkbox_main">
+                                                    <label class="select_m">
+                                                        <span class="chkbox_txt">  Credit Cards   </span>
+                                                        <input type="checkbox">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-check">
+
+                                                <div class="checkbox_main">
+                                                    <label class="select_m">
+                                                        <span class="chkbox_txt"> Bank Account  </span>
+                                                        <input type="checkbox">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+                                                </div>
+                                            </div><div class="form-check">
+
+                                                <div class="checkbox_main">
+                                                    <label class="select_m">
+                                                        <span class="chkbox_txt"> US Passports   </span>
+                                                        <input type="checkbox">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="sort_by mt-0">
+                            <div class="sort">
+                                <ul class="sort_ul ml-2">
+                                    <li><a href="#" title="Name" class="">All</a></li>
+                                    <li><a href="#" title="Name" class="">Databases Only</a></li>
+                                    <li><a href="#" title="Name" class=""> Machines only </a></li>
+
+
+
+                                </ul>
+                                <div class=" ">
+                                    <button type="button" class="btn_submit ml-3"> Submit</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="twitter_data_hd">
+                            <h2 class="heading_in f-22">
+                                Enivronment: Production Databases
+                            </h2>
+                        </div>
+
+                        <div class="list_main pb-2">
+                            <div class="common_list list_headimng">
+
+                                <div class="data_name" style="max-width:13%">  Server Name   </div>
+                                <div class="data_name" style="max-width:13%">
+                                    Social
+                                    Security
+                                </div>
+                                <div class="data_name" style="max-width:13%">  BirthDates  </div>
+                                <div class="data_name" style="max-width:13%"> Credit Cards </div>
+                                <div class="data_name" style="max-width:15%">
+                                    Bank
+                                    Account
+                                    Numbers
+                                </div>
+                                <div class="data_name" style="max-width:15%">
+                                    Personal
+                                    Addresses
+                                </div>
+                                <div class="data_name" style="max-width:15%">
+                                    Passport
+                                    Numbers
+                                </div>
+
+
+
+                            </div>
+                            <div class="common_list">
+                                <div class="data_LU_table" style="max-width:13%"> NJ1DB </div>
+                                <div class="data_LU_table" style="max-width:13%"> 200 </div>
+                                <div class="data_LU_table" style="max-width:13%"> 300 </div>
+                                <div class="data_LU_table" style="max-width:13%"> 500 </div>
+                                <div class="data_LU_table" style="max-width:15%"> 600  </div>
+                                <div class="data_LU_table" style="max-width:15%"> 500 </div>
+                                <div class="data_LU_table" style="max-width:15%"> 400 </div>
+
+
+                            </div>
+
+                            <div class="common_list">
+                                <div class="data_LU_table" style="max-width:13%"> NJ2DB </div>
+                                <div class="data_LU_table" style="max-width:13%"> 100 </div>
+                                <div class="data_LU_table" style="max-width:13%"> 200 </div>
+                                <div class="data_LU_table" style="max-width:13%"> 200 </div>
+                                <div class="data_LU_table" style="max-width:15%"> 5  </div>
+                                <div class="data_LU_table" style="max-width:15%"> 2 </div>
+                                <div class="data_LU_table" style="max-width:15%"> 1 </div>
+
+
+                            </div>
+
+                            <div class="common_list ">
+                                <div class="data_LU_table font-weight-bold" style="max-width:13%"> Total </div>
+                                <div class="data_LU_table font-weight-bold" style="max-width:13%"> 300 </div>
+                                <div class="data_LU_table font-weight-bold" style="max-width:13%"> 500 </div>
+                                <div class="data_LU_table font-weight-bold" style="max-width:13%"> 700 </div>
+                                <div class="data_LU_table font-weight-bold" style="max-width:15%"> 605  </div>
+                                <div class="data_LU_table font-weight-bold" style="max-width:15%"> 502 </div>
+                                <div class="data_LU_table font-weight-bold" style="max-width:15%"> 401 </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+
+
+
+                        <div class="twitter_data_hd">
+                            <h2 class="heading_in f-22">
+                                Enivronment: Development Databases
+                            </h2>
+                        </div>
+
+                        <div class="list_main pb-2">
+                            <div class="common_list list_headimng">
+
+                                <div class="data_name" style="max-width:13%">  Server Name   </div>
+                                <div class="data_name" style="max-width:13%">
+                                    Social
+                                    Security
+                                </div>
+                                <div class="data_name" style="max-width:13%">  BirthDates  </div>
+                                <div class="data_name" style="max-width:13%"> Credit Cards </div>
+                                <div class="data_name" style="max-width:15%">
+                                    Bank
+                                    Account
+                                    Numbers
+                                </div>
+                                <div class="data_name" style="max-width:15%">
+                                    Personal
+                                    Addresses
+                                </div>
+                                <div class="data_name" style="max-width:15%">
+                                    Passport
+                                    Numbers
+                                </div>
+
+
+
+                            </div>
+                            <div class="common_list">
+                                <div class="data_LU_table" style="max-width:13%"> NJ1DB </div>
+                                <div class="data_LU_table" style="max-width:13%"> 200 </div>
+                                <div class="data_LU_table" style="max-width:13%"> 300 </div>
+                                <div class="data_LU_table" style="max-width:13%"> 500 </div>
+                                <div class="data_LU_table" style="max-width:15%"> 600  </div>
+                                <div class="data_LU_table" style="max-width:15%"> 500 </div>
+                                <div class="data_LU_table" style="max-width:15%"> 400 </div>
+
+
+                            </div>
+
+                            <div class="common_list">
+                                <div class="data_LU_table" style="max-width:13%"> NJ2DB </div>
+                                <div class="data_LU_table" style="max-width:13%"> 100 </div>
+                                <div class="data_LU_table" style="max-width:13%"> 200 </div>
+                                <div class="data_LU_table" style="max-width:13%"> 200 </div>
+                                <div class="data_LU_table" style="max-width:15%"> 5  </div>
+                                <div class="data_LU_table" style="max-width:15%"> 2 </div>
+                                <div class="data_LU_table" style="max-width:15%"> 1 </div>
+
+
+                            </div>
+
+                            <div class="common_list ">
+                                <div class="data_LU_table font-weight-bold" style="max-width:13%"> Total </div>
+                                <div class="data_LU_table font-weight-bold" style="max-width:13%"> 300 </div>
+                                <div class="data_LU_table font-weight-bold" style="max-width:13%"> 500 </div>
+                                <div class="data_LU_table font-weight-bold" style="max-width:13%"> 700 </div>
+                                <div class="data_LU_table font-weight-bold" style="max-width:15%"> 605  </div>
+                                <div class="data_LU_table font-weight-bold" style="max-width:15%"> 502 </div>
+                                <div class="data_LU_table font-weight-bold" style="max-width:15%"> 401 </div>
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>

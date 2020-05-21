@@ -1,0 +1,59 @@
+﻿@model DataSense_UI.Models.ViewModels.ExcludeDirectoryViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section documentHeadAdditions {
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
+}
+@using (Html.BeginForm("Patch", "ExcludeDirectory", FormMethod.Post, new { @class = "container-fluid h-100 first_screen", role = "form" }))
+{
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/DataSet" title="Data Sets">Data Sets</a> / </li>
+                    <li> <a href="/DataSet" title="@Model.DataSetName">@Model.DataSetName</a> / </li>
+                    <li> Exclude Directory </li>
+                </ul>
+            </div>
+            <div class="twitter_data_hd">
+                <h2 class="heading_in"> Exclude Directory </h2>
+            </div>
+            <div class="edit_form">
+                <div class="form-group">
+                    <div class="form_h4 error">
+                        @if (Model != null)
+                        {
+                            if (Model.ErrorMessage != null)
+                            {
+                                @Model.ErrorMessage
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="name_lbl"> Exclude Directory </label>
+                    @Html.TextBox("directoryExclude", Model.objDataSetIndexCredExcludeDirPatch.directoryExclude, new { @class = "form-control", required = "required", autocapitalize = "none" })
+                    @Html.ValidationMessageFor(m => m.objDataSetIndexCredExcludeDirPatch.directoryExclude, "", new { @class = "error" })
+                  
+                    <input type="hidden" name="credId" id="credId" value="@ViewBag.credId" />
+                    <input type="hidden" name="id" id="id" value="@ViewBag.id" />
+                    <input type="hidden" name="dataSetId" id="dataSetId" value="@ViewBag.dataSetId" />
+                    <input type="hidden" name="dataSetIndexId" id="dataSetIndexId" value="@ViewBag.dataSetIndexId" />
+                </div>
+                <div class="btns">
+                    <button type="submit" class="save_btn">Save</button>
+                    <button type="button" class="cancel_btn" onclick="location.href = '/ExcludeDirectory/Index?credId=@ViewBag.credId&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId';">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

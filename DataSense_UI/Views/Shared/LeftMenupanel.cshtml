@@ -1,0 +1,15 @@
+﻿
+<div class="col-lg-2 lt_main">
+    <h1 class="logo_h1"><img src="/images/logo.svg"></h1>
+    <nav class="navbar_main">
+        <ul class="navbar_ul">
+            <li> <a href="/Dashboard" title="Dashboard" class="@(Request.Url.AbsoluteUri.ToString().ToLower().Contains("dashboard") ? "dashboard active" : "dashboard")"><span>Dashboard</span> </a></li>
+            <li> <a href="/ManageUsers" title="Manage Users" class="@(Request.Url.AbsoluteUri.ToString().ToLower().Contains("manageusers") ? "manage_U active" : "manage_U")"><span> Manage Users</span> </a></li>
+            <li> <a href="/DataSet" title="Data Sets" class="@(Request.Url.AbsoluteUri.ToString().ToLower().Contains("dataset") ? "data_S active" : "data_S")"><span>Data Sets</span> </a></li>
+            <li> <a href="/Reports/Dashboard" title="Reports" class="@(Request.Url.AbsoluteUri.ToString().ToLower().Contains("ReportDashboard") ? "data_S active" : "data_S")"><span>Reports</span> </a></li>
+
+            <li> <a href="/Authenticate/ChangePassword" title="Change Password" class="@(Request.Url.AbsoluteUri.ToString().ToLower().Contains("changepassword") ? "data_S active" : "data_S")"><span> Change Password </span> </a></li>
+            <li> <a href="/Authenticate/LogOut" title="Log Out" class="@(Request.Url.AbsoluteUri.ToString().ToLower().Contains("logout") ? "data_S active" : "data_S")"><span>Log Out</span> </a></li>
+        </ul>
+    </nav>
+</div>

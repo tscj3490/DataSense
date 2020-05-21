@@ -1,0 +1,68 @@
+﻿@model DataSense_UI.Models.ViewModels.AuthenticateViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+@section documentHeadAdditions {
+    <style type="text/css">
+    .error{
+        color: red;
+    }
+    </style>
+}
+@using (Html.BeginForm("Login", "Authenticate", FormMethod.Post, new { @class = "container-fluid h-100 first_screen", role = "form" }))
+{
+    <div class="ccccontainer-fluid h-100 first_screen">
+        <div class="row h-100">
+            <div class="col-lg-6 lt_container">
+                <h1 class="main_logo"> <img src="~/images/logo.svg"> <span class="powerdby"> Datasense powered by Avexta </span> </h1>
+                <div class="middle_main">
+                    <div class="middle_ware">
+                        <span>
+                            Middle Ware <br>
+                            for Enterprise
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 rt_container  align-self-center">
+
+                <div class="w-75 mx-auto login_form">
+                    <form action="data_sets.html">
+                        <div class="form-group">
+                            <div class="form_h4 error">
+                                @if (Model != null)
+                                {
+                                    if (Model.ErrorMessage != null)
+                                    {
+                                        @Model.ErrorMessage
+                                    }
+                                }
+                            </div>
+                            <h4 class="form_h4"> Please login to your account</h4>
+                            <!--<input type="email" class="form-control" id="email" placeholder="username">-->
+                            @Html.TextBoxFor(m => m.emailAddress, new { @class = "form-control", maxlength = "100", required = "required", autocomplete = "username", autocapitalize = "none" })
+                            @Html.ValidationMessageFor(m => m.emailAddress)
+                        </div>
+                        <div class="form-group">
+                            <!--<input type="password" class="form-control" id="pwd" placeholder="password">-->
+                            @Html.PasswordFor(m => m.passWord, new { @class = "form-control", maxlength = "100", required = "required", autocomplete = "current-password", autocapitalize = "none" })
+                            @Html.ValidationMessageFor(m => m.passWord)
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" name="Rememberme">
+                                Remember me
+                            </label>
+                            <a href="/Authenticate/ForgotPassword" title="Forgot Password?" class="forgt_p"> Forgot Password?</a>
+                        </div>
+                        <button type="submit" class="btn login_btn">Login</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+}

@@ -1,0 +1,48 @@
+﻿@model DataSense_UI.Models.ViewModels.KeyWordsViewModel
+@using DataSense_UI.Controllers
+
+<div class="container-fluid h-100 main_app">
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/DataSet" title="Data Set"> Data Set </a> / </li>
+                    <li> <a href="/DataSetIndex/Index?id=@ViewBag.DatasetId" title="View Indexes"> View Indexes </a> / </li>
+                    <li> @Model.DataSetName / </li>
+                    <li> Keywords </li>
+                </ul>
+            </div>
+            <div class="twitter_data_hd">
+                <h2 class="heading_in"> Keywords </h2>
+                <div class="add_data">
+                    <a class="add_data_btn" href="@Url.Content("/KeyWords/Add?id="+Request.QueryString["id"]+"&Datasetid="+ViewBag.DatasetId)" style="text-decoration:none;">
+                        <span>+</span> Add Keywords
+                    </a>
+                    @*<button type="button" class="add_data_btn"> <span>+</span>Add Keywords </button>*@
+                </div>
+            </div>
+            <div class="list_main">
+                <div class="common_list list_headimng">
+                    <div class="data_name"> Keyword </div>
+                    <div class="data_LU_table">Created on </div>
+                    <div class="created_at">Created at </div>
+                    <div class="created_on"> Created by</div>
+                    <div class="vw_index"> </div>
+                    <div class="actions"> Actions </div>
+                </div>
+                @foreach (DataSense_UI.Models.DTO.DataSetKeyWord ds in Model.dataSetKeyWordViewList)
+                {
+                    <div class="common_list">
+                        <div class="data_name"><a href="/KeyWords/Edit?id=@ds.id" title="@ds.keyWord">@ds.keyWord</a></div>
+                        <div class="data_LU_table">@(ds.createdOn == null ? "" : DateTime.Parse(ds.createdOn.ToString()).ToShortDateString())</div>
+                        <div class="created_at">@(ds.createdOn == null ? "" : DateTime.Parse(ds.createdOn.ToString()).ToShortTimeString())</div>
+                        <div class="created_on">@ds.createdBy</div>
+                        <div class="vw_index"> </div>
+                        <div class="actions"> <a href="/KeyWords/Edit?id=@ds.id&datasetindexid=@ds.dataSetIndexId&Datasetid=@ViewBag.DatasetId" title="edit" class="edit_a"><img src="/images/edit.svg"></a> <a href="/KeyWords/Delete?id=@ds.id&datasetindexid=@ds.dataSetIndexId&Datasetid=@ViewBag.DatasetId" title="delete" class="delete_a"><img src="/images/trash.svg"></a> </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

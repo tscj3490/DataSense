@@ -1,0 +1,62 @@
+﻿@model DataSense_UI.Models.ViewModels.DataTypeViewModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section documentHeadAdditions {
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
+}
+
+@using (Html.BeginForm("patch", "DataType", FormMethod.Post, new { @class = "container-fluid h-100 main_app", role = "form" }))
+{
+    <div class="container-fluid h-100 main_app">
+        <div class="row">
+            @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+            <div class="col-lg-10 rt_main">
+                <div class="heading_top">
+                    <ul class="pagination_ul">
+                        <li> <a href="/DataSet" title="Data Set "> Data Sets </a> / </li>
+                        <li> <a href="/DataSetIndex/Index?id=@ViewBag.dataSetId" title="View Indexes"> @Model.DataSetName</a> / </li>
+                        <li> <a href="/ViewMachines/Index?dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId" title="View Indexes"> View Machines </a> / </li>
+                        <li> <a href="/DataType/Index?CredId=@ViewBag.dataSetIndexCredId&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId" title="View Indexes">View Data Types </a> / </li>
+                        <li> Edit Data Type </li>
+                    </ul>
+                </div>
+                <div class="twitter_data_hd">
+                    <h2 class="heading_in"> @Model.DataSetName </h2>
+                </div>
+                <div class="edit_form">
+                    <div class="form-group">
+                        <label class="name_lbl text1"> Data Type Expression </label>
+                        @Html.TextBoxFor(m => m.regDataTypePatch.regularExpression, new { @class = "form-control", required = "required", autocapitalize = "none" })
+                        @Html.ValidationMessageFor(m => m.regDataTypePatch.regularExpression)
+                        <input type="hidden" name="RegExId" value="@Model.dataSetIndexRegExId" />
+                        <input type="hidden" name="CredId" value="@ViewBag.dataSetIndexCredId" />
+                        <input type="hidden" name="dataSetIndexId" value="@ViewBag.dataSetIndexId" />
+                        <input type="hidden" name="dataSetId" value="@ViewBag.dataSetId" />
+                    </div>
+                    <div class="form-group">
+                        <label class="name_lbl text2"> Data Type Description </label>
+                        @Html.TextBoxFor(m => m.regDataTypePatch.dataTypeDesc, new {@class = "form-control", required = "required",  autocapitalize = "none" })
+                        @Html.ValidationMessageFor(m => m.regDataTypePatch.dataTypeDesc)
+                    </div>
+                    <div class="checkbox_main">
+                        <label class="select_m">
+                            <span class="chkbox_txt"> Active </span>
+                            @Html.CheckBoxFor(m => m.regDataTypePatch.active, new { })
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="btns">
+                        <button type="submit" class="save_btn">Save</button>
+                        <button type="button" class="cancel_btn" onclick="location.href = '/DataType/Index?CredId=@ViewBag.dataSetIndexCredId&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId';">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

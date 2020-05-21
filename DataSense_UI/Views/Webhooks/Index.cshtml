@@ -1,0 +1,301 @@
+﻿@model DataSense_UI.Models.ViewModels.WebhookViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section documentHeadAdditions {
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+
+        .Action_Edit {
+            width: 20px;
+            height: 20px;
+            display: block;
+            float: left;
+            margin-left: 5px;
+            margin-top: -5px;
+        }
+
+        .Action_Delete {
+            width: 14px;
+            height: 20px;
+            display: block;
+            float: left;
+            margin-left: 10px;
+            margin-top: -5px;
+        }
+
+        .dialog-ovelay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.50);
+            z-index: 999999;
+        }
+
+            .dialog-ovelay .dialog {
+                width: 400px;
+                margin: 100px auto 0;
+                background-color: #fff;
+                box-shadow: 0 0 20px rgba(0,0,0,.2);
+                border-radius: 3px;
+                overflow: hidden;
+            }
+
+                .dialog-ovelay .dialog header {
+                    padding: 10px 8px;
+                    background-color: #f6f7f9;
+                    border-bottom: 1px solid #e5e5e5;
+                }
+
+                    .dialog-ovelay .dialog header h3 {
+                        font-size: 14px;
+                        margin: 0;
+                        color: #555;
+                        display: inline-block;
+                    }
+
+                    .dialog-ovelay .dialog header .fa-close {
+                        float: right;
+                        color: #c4c5c7;
+                        cursor: pointer;
+                        transition: all .5s ease;
+                        padding: 0 2px;
+                        border-radius: 1px;
+                    }
+
+                        .dialog-ovelay .dialog header .fa-close:hover {
+                            color: #b9b9b9;
+                        }
+
+                        .dialog-ovelay .dialog header .fa-close:active {
+                            box-shadow: 0 0 5px #673AB7;
+                            color: #a2a2a2;
+                        }
+
+                .dialog-ovelay .dialog .dialog-msg {
+                    padding: 12px 10px;
+                }
+
+                    .dialog-ovelay .dialog .dialog-msg p {
+                        margin: 0;
+                        font-size: 15px;
+                        color: #333;
+                    }
+
+                .dialog-ovelay .dialog footer {
+                    border-top: 1px solid #e5e5e5;
+                    padding: 8px 10px;
+                }
+
+                    .dialog-ovelay .dialog footer .controls {
+                        direction: rtl;
+                    }
+
+                        .dialog-ovelay .dialog footer .controls .button {
+                            padding: 5px 15px;
+                            border-radius: 3px;
+                        }
+
+        .button {
+            cursor: pointer;
+        }
+
+        .button-default {
+            background-color: #6fc04e; /*#6fc04e*/
+            /*border: 1px solid rgba(204, 204, 204, 0.5);*/
+            color: #ffffff; /*#ffffff*/
+        }
+
+        .button-danger {
+            background-color: #f44336;
+            border: 1px solid #d32f2f;
+            color: #f5f5f5;
+        }
+
+        .link {
+            /*padding: 5px 10px;*/
+            cursor: pointer;
+        }
+    </style>
+}
+<script type="text/javascript">
+    function Confirm(title, msg, $true, $false, $link) { /*change*/
+
+        var $content = "<div class='dialog-ovelay'>" +
+                        "<div class='dialog'><header>" +
+                         " <h2 style='font-size: 26px;font-weight: normal;color: #545556;'> " + title + " </h2> " +
+                         "<i class='fa fa-close'></i>" +
+                     "</header>" +
+                     "<div class='dialog-msg'>" +
+                         " <p> " + msg + " </p> " +
+                     "</div>" +
+                     "<footer>" +
+                         "<div class='controls'>" +
+                             " <button class='button button-danger doAction'>" + $true + "</button> " +
+                             " <button class='button button-default cancelAction'>" + $false + "</button> " +
+                         "</div>" +
+                     "</footer>" +
+                  "</div>" +
+                "</div>";
+        $('body').prepend($content);
+        $('.doAction').click(function () {
+            $(this).parents('.dialog-ovelay').fadeOut(500, function () {
+                $(this).remove();
+            });
+            location.href = $link;
+        });
+        $('.cancelAction, .fa-close').click(function () {
+            $(this).parents('.dialog-ovelay').fadeOut(500, function () {
+                $(this).remove();
+            });
+        });
+    }
+</script>
+<div class="container-fluid h-100 main_app">
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/DataSet" title="Data Sets">Data Sets</a> / </li>
+                    <li> <a href="/DataSetIndex/Index?id=@ViewBag.dataSetId" title="View Indexes"> @Model.DataSetName </a> / </li>
+                    <li> <a href="/ViewMachines/Index?dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId" title="View Indexes"> View Machines </a> / </li>
+                    <li> <a href="/DataType/Index?CredId=@ViewBag.dataSetIndexCredId&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId" title="Data Types"> Data Types </a> / </li>
+                    <li> Webhooks </li>
+                </ul>
+            </div>
+            <div class="twitter_data_hd">
+                <h2 class="heading_in">
+                    Webhooks
+                </h2>
+                <div class="add_data">
+                    <button type="button" class="add_data_btn" data-toggle="modal" data-target="#myModalAdd"> <span>+</span> Add Webhooks </button>
+                    @*<a class="add_data_btn" href="@Url.Content("/Webhooks/Add?CredId="+ViewBag.dataSetIndexCredId + "&dataSetIndexId=" + ViewBag.dataSetIndexId + "&dataSetId=" + ViewBag.dataSetId + "&DataSetIndexExpID=" + ViewBag.DataSetIndexExpID)" style="text-decoration:none;">
+                            <span>+</span> Add Webhooks
+                        </a>*@
+                </div>
+            </div>
+            <div class="list_results">
+                <div class="form-group">
+                    <div class="form_h4 error">
+                        @if (Model != null)
+                        {
+                            if (Model.errormsg != null)
+                            {
+                                @Model.errormsg
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="index_list">
+                <div class="row index_list_headimng">
+                    <div class="col"> Name </div>
+                    <div class="col"> URL </div>
+                    <div class="col"> Auth Header </div>
+                    <div class="col"> Actions </div>
+                </div>
+
+                @if (Model.objDataSetIndexExpHook.Count == 0)
+                {
+                    <div class="row common_IL">
+                        No Data found.
+                    </div>
+                }
+
+                <div class="ss-box">
+                    @foreach (DataSense_UI.Models.DTO.DataSetIndexExpHook ds in Model.objDataSetIndexExpHook)
+                    {
+                        <div class="row common_IL" data-name="@ds.HookURL | @ds.HookName | @ds.HookAuthorization">
+                            <div class="col"> @ds.HookName </div>
+                            <div class="col">@ds.HookURL</div>
+                            <div class="col"> @ds.HookAuthorization</div>
+                            <div class="col">
+                                <a href="#" title="edit" class="Action_Edit" data-toggle="modal" data-target="#myModal@(ds.id)"><img src="/images/edit.svg"></a>
+                                <a onclick="Confirm('Confirm', 'Are you sure you want to delete?', 'confirm', 'Cancel', '@Url.Content("/Webhooks/Delete?id="+ ds.id + "&CredId="+ ViewBag.dataSetIndexCredId + "&dataSetIndexId=" + ViewBag.dataSetIndexId + "&dataSetId=" + ViewBag.dataSetId + "&DataSetIndexExpID=" + ViewBag.DataSetIndexExpID)');" href="#" title="Delete" class="Action_Delete"><img src="/images/trash.svg"></a>
+                            </div>
+                        </div>
+                        //Edit Model
+                        <div class="modal fade api_modal" id="myModal@(ds.id)">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    @using (Html.BeginForm("Patch", "Webhooks", FormMethod.Post, new { @class = "", role = "form" }))
+                                    {
+                                        <div class="edit_form">
+                                            <div class="form-group">
+                                                <label class="name_lbl text2"> Name*</label>
+                                                @Html.TextBox("objWebhookPatch.HookName", ds.HookName, new { @class = "form-control", required = "required", autocapitalize = "none" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="name_lbl text1"> URL* </label>
+                                                @Html.TextBox("objWebhookPatch.HookURL", ds.HookURL, new { @class = "form-control", required = "required", autocapitalize = "none" })
+                                                <input type="hidden" name="CredId" value="@ViewBag.dataSetIndexCredId" />
+                                                <input type="hidden" name="id" value="@ds.id" />
+                                                <input type="hidden" name="dataSetIndexId" value="@ViewBag.dataSetIndexId" />
+                                                <input type="hidden" name="dataSetId" value="@ViewBag.dataSetId" />
+                                                <input type="hidden" name="DataSetIndexExpID" value="@ViewBag.DataSetIndexExpID" />
+                                                <input type="hidden" name="objWebhookPatch.DataSetIndexExpID" value="@ViewBag.DataSetIndexExpID" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="name_lbl text2"> Authorization Header </label>
+                                                @Html.TextBox("objWebhookPatch.HookAuthorization", ds.HookAuthorization, new { @class = "form-control", autocapitalize = "none" })
+                                            </div>
+                                            <div class="btns">
+                                                <button type="submit" class="save_btn">Save</button>
+                                                <button type="button" class="cancel_btn" onclick="location.href = '/Webhooks/Index?CredId=@ViewBag.dataSetIndexCredId&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId&DataSetIndexExpID=@ViewBag.DataSetIndexExpID';">Cancel</button>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @*Add Model*@
+                    <div class="modal fade api_modal" id="myModalAdd">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                @using (Html.BeginForm("Post", "Webhooks", FormMethod.Post, new { @class = "", role = "form" }))
+                                {
+                                    <div class="edit_form" style="margin:0;padding:30px 40px 50px 40px;">
+                                        <div class="form-group">
+                                            <label class="name_lbl text2"> Name*</label>
+                                            @Html.TextBoxFor(m => m.objwebhookPost.HookName, new { Value = "", @class = "form-control", required = "required", autocapitalize = "none" })
+                                            @Html.ValidationMessageFor(m => m.objwebhookPost.HookName)
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="name_lbl text1"> URL* </label>
+                                            @Html.TextBoxFor(m => m.objwebhookPost.HookURL, new { @class = "form-control", required = "required", autocapitalize = "none" })
+                                            @Html.ValidationMessageFor(m => m.objwebhookPost.HookURL)
+                                            <input type="hidden" name="CredId" value="@ViewBag.dataSetIndexCredId" />
+                                            <input type="hidden" name="dataSetIndexId" value="@ViewBag.dataSetIndexId" />
+                                            <input type="hidden" name="dataSetId" value="@ViewBag.dataSetId" />
+                                            <input type="hidden" name="DataSetIndexExpID" value="@ViewBag.DataSetIndexExpID" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="name_lbl text2"> Authorization Header </label>
+                                            @Html.TextBoxFor(m => m.objwebhookPost.HookAuthorization, new { Value = "", @class = "form-control", autocapitalize = "none" })
+                                            @Html.ValidationMessageFor(m => m.objwebhookPost.HookAuthorization)
+                                        </div>
+                                        <div class="btns">
+                                            <button type="submit" class="save_btn">Save</button>
+                                            <button type="button" class="cancel_btn" onclick="location.href = '/Webhooks/Index?CredId=@ViewBag.dataSetIndexCredId&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId&DataSetIndexExpID=@ViewBag.DataSetIndexExpID';">Cancel</button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

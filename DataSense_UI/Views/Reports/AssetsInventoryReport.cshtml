@@ -1,0 +1,48 @@
+﻿@model DataSense_UI.Models.ViewModels.AssetsInventoryViewModel
+
+@{
+    ViewBag.Title = "AssetsInventoryReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ 
+<div class="container-fluid h-100 main_app">
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+
+
+
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <h3> Assets Inventory Report </h3>
+            </div>
+            <div>
+            @foreach (DataSense_UI.Models.DTO.AssetsInventoryResp asset in Model.assetsInventories)
+            {
+                <div class="twitter_data_hd mt-3">
+                    <h2 class="heading_in f-22">
+                        @asset.masterEnv
+                    </h2>
+                </div>
+                <div class="list_main pb-2">
+                    <div class="common_list list_headimng pt-0">
+
+                        <div class="data_name" style="max-width:20%; width:20%; margin-left:20%;"> Environment </div>
+                        <div class="data_name" style="max-width:20%; width:20%"> Total </div>
+                        <div class="data_name" style="max-width:20%; width:20%"> Machines </div>
+                        <div class="data_name" style="max-width:20%; width:20%"> Database </div>
+                    </div>
+
+                    @foreach (DataSense_UI.Models.DTO.AssetsInventoryChild childItem in asset.childEnv)
+                    {
+                        <div class="common_list">
+                            <div class="data_LU_table" style="max-width:20%; width:20%; margin-left:20%; "> @childItem.childEnv </div>
+                            <div class="data_LU_table" style="max-width:20%; width:20%"> @childItem.totalAssets </div>
+                            <div class="data_LU_table" style="max-width:20%; width:20%"> @childItem.serverCount (@childItem.nonActiveServers)  </div>
+                            <div class="data_LU_table" style="max-width:20%; width:20%"> @childItem.dbCount </div>
+                        </div>
+                    }
+                </div>
+            }
+                        
+    </div>
+</div>

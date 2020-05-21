@@ -1,0 +1,420 @@
+﻿@model DataSense_UI.Models.ViewModels.ViewMachinesViewModel
+
+@section documentHeadAdditions {
+    <style type="text/css">
+        .dialog-ovelay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.50);
+            z-index: 999999;
+        }
+
+            .dialog-ovelay .dialog {
+                width: 400px;
+                margin: 100px auto 0;
+                background-color: #fff;
+                box-shadow: 0 0 20px rgba(0,0,0,.2);
+                border-radius: 3px;
+                overflow: hidden;
+            }
+
+                .dialog-ovelay .dialog header {
+                    padding: 10px 8px;
+                    background-color: #f6f7f9;
+                    border-bottom: 1px solid #e5e5e5;
+                }
+
+                    .dialog-ovelay .dialog header h3 {
+                        font-size: 14px;
+                        margin: 0;
+                        color: #555;
+                        display: inline-block;
+                    }
+
+                    .dialog-ovelay .dialog header .fa-close {
+                        float: right;
+                        color: #c4c5c7;
+                        cursor: pointer;
+                        transition: all .5s ease;
+                        padding: 0 2px;
+                        border-radius: 1px;
+                    }
+
+                        .dialog-ovelay .dialog header .fa-close:hover {
+                            color: #b9b9b9;
+                        }
+
+                        .dialog-ovelay .dialog header .fa-close:active {
+                            box-shadow: 0 0 5px #673AB7;
+                            color: #a2a2a2;
+                        }
+
+                .dialog-ovelay .dialog .dialog-msg {
+                    padding: 12px 10px;
+                }
+
+                    .dialog-ovelay .dialog .dialog-msg p {
+                        margin: 0;
+                        font-size: 15px;
+                        color: #333;
+                    }
+
+                .dialog-ovelay .dialog footer {
+                    border-top: 1px solid #e5e5e5;
+                    padding: 8px 10px;
+                }
+
+                    .dialog-ovelay .dialog footer .controls {
+                        direction: rtl;
+                    }
+
+                        .dialog-ovelay .dialog footer .controls .button {
+                            padding: 5px 15px;
+                            border-radius: 3px;
+                        }
+
+        .button {
+            cursor: pointer;
+        }
+
+        .button-default {
+            background-color: #6fc04e; /*#6fc04e*/
+            /*border: 1px solid rgba(204, 204, 204, 0.5);*/
+            color: #ffffff; /*#ffffff*/
+        }
+
+        .button-danger {
+            background-color: #f44336;
+            border: 1px solid #d32f2f;
+            color: #f5f5f5;
+        }
+
+        .link {
+            /*padding: 5px 10px;*/
+            cursor: pointer;
+        }
+    </style>
+}
+
+<script type="text/javascript">
+    function searchserver() {
+        var txtserver = document.getElementById("ss-name-filterserver").value;
+        window.location.href = "/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=1&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=" + txtserver + "&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)";
+    }
+    function searchdatabase() {
+        var txtdatabase = document.getElementById("ss-name-filterdatabase").value;
+        window.location.href = "/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=1&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=" + txtdatabase + "&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)";
+    }
+    $(document).ready(function () {
+
+        $('#ss-name-filterserver').on('change', function () {
+            window.location.href = "/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=1&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=" + $(this).val() + "&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)";
+        });
+        $('#ss-name-filterdatabase').on('change', function () {
+            window.location.href = "/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=1&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=" + $(this).val() + "&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)";
+        });
+    });
+    function Confirm(title, msg, $true, $false, $link) { /*change*/
+
+        var $content = "<div class='dialog-ovelay'>" +
+            "<div class='dialog'><header>" +
+            " <h2 style='font-size: 26px;font-weight: normal;color: #545556;'> " + title + " </h2> " +
+            "<i class='fa fa-close'></i>" +
+            "</header>" +
+            "<div class='dialog-msg'>" +
+            " <p> " + msg + " </p> " +
+            "</div>" +
+            "<footer>" +
+            "<div class='controls'>" +
+            " <button class='button button-danger doAction'>" + $true + "</button> " +
+            " <button class='button button-default cancelAction'>" + $false + "</button> " +
+            "</div>" +
+            "</footer>" +
+            "</div>" +
+            "</div>";
+        $('body').prepend($content);
+        $('.doAction').click(function () {
+            $(this).parents('.dialog-ovelay').fadeOut(500, function () {
+                $(this).remove();
+            });
+            location.href = $link;
+        });
+        $('.cancelAction, .fa-close').click(function () {
+            $(this).parents('.dialog-ovelay').fadeOut(500, function () {
+                $(this).remove();
+            });
+        });
+    }
+</script>
+
+<div class="container-fluid h-100 main_app">
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/DataSet" title="Data Sets">Data Sets</a> / </li>
+                    <li> <a href="/DataSetIndex/Index?id=@ViewBag.dataSetId" title="View Indexes"> @Model.DataSetName </a> / </li>
+                    <li> View Machines </li>
+                </ul>
+            </div>
+            <div class="twitter_data_hd">
+                <h2 class="heading_in"> View Machines</h2>
+                <div class="add_data">
+                    <a class="add_data_btn" href="@Url.Content("/ViewMachines/Add?dataSetIndexId=" + Request.QueryString["dataSetIndexId"] + "&dataSetId=" + @ViewBag.dataSetId)" style="text-decoration:none;">
+                        <span>+</span> Add View Machines
+                    </a>
+                </div>
+            </div>
+            <div class="sort_by mt-0">
+                <div class="search_box ml-0">
+                    <input type="text" class="serch" id="ss-name-filterserver" value="@(ViewBag.Search)">
+                    <button type="button" class="search_btn" onclick="searchserver();"></button>
+                    
+                </div>
+                <div class="sort">
+                    <ul class="sort_ul ml-2">
+                        <li><a href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=1&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)" value="all" id="statusofall" title="Name" class="@(Model.isActive==string.Empty ? "active":"")">All</a></li>
+                        <li><a href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=1&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=true&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)" value="active" id="statusofactive" title="Name" class="@(Model.isActive=="true" ? "active":"")">Active</a></li>
+                        <li><a href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=1&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=false&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)" value="notactive" id="statusofnotactive" title="Name" class="@(Model.isActive=="false" ? "active":"")">Not Active</a></li>
+                    </ul>
+                </div>
+                @if (Model.pagingHeaders.TotalPages > 1)
+                {
+                    <div class="add_data">
+                        <div class="mt-3"> Records: <b>@(Model.ViewMachinesViewList.Count() * Model.pagingHeaders.CurrentPage)</b> out of @Model.pagingHeaders.TotalCount </div>
+                    </div>
+                }
+            </div>
+            @if (Model.pagingHeaders.TotalPages > 1)
+            {
+                <div class="sort_by mt-0 pt-0">
+                    <div class="sort">
+                        <div class="dropdown">
+                            <a type="button" class="btn dropdown-toggle border" data-toggle="dropdown" style="font-size:12px"> @Model.pageSize rows per page </a>
+                            <div class="dropdown-menu" style="font-size:12px"> 
+                                <a class="dropdown-item" href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=1&pageSize=10&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)">10 rows per page</a> 
+                                <a class="dropdown-item" href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=1&pageSize=20&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)">20 items per page</a> 
+                                <a class="dropdown-item" href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=1&pageSize=50&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)">50 items per page</a> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="list_main pb-2">
+                <div class="common_list list_headimng">
+                    <div class="col2 ServerShare" style="max-width: 20%;">
+                        <a href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=1&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby=="server" ? "server_desc":"server")&sortbydb=@(Model.sortbydb)">Server/Share</a></div>
+                    <div class="col created_on">
+                        <a href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=1&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby=="scanstarted" ? "scanstarted_desc":"scanstarted")&sortbydb=@(Model.sortbydb)">Scan Started</a>
+                    </div>
+                    <div class="col created_on"><a href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=1&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby=="scanended" ? "scanended_desc":"scanended")&sortbydb=@(Model.sortbydb)">Scan Ended</a></div>
+                    <div class="col ServerShare" style="max-width: 7%;"><a href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=1&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby=="pii" ? "pii_desc":"pii")&sortbydb=@(Model.sortbydb)">PII Found</a></div>
+                    <div class="col data_LU_table" style="max-width:6%;">Active</div>
+                    <div class="col ServerShare" style="max-width:8%;">Data Type</div>
+                    <div class="col ServerShare" style="max-width:10%;">Exclude Directory</div>
+                    <div class="col ServerShare" style="max-width:10%;">Results</div>
+                    <div class="col ServerShare" style="max-width:8%;">Notify</div>
+                    <div class="actions"> Actions </div>
+                </div>
+                <div class="ss-boxservers">
+                    @{ 
+                        int PIIFound = 1000;
+                    }
+
+                    @foreach (DataSense_UI.Models.DTO.ViewMachines ds in Model.ViewMachinesViewList)
+                    {
+                        <div class="common_list" data-name="@ds.computerName | @ds.active">
+                                @if (ds.computerName == "" || ds.computerName == null)
+                                {
+                                    ds.computerName = "Name Not Available";
+                                }
+                                <div class="col2 ServerShare" style="max-width: 20%;"><a href="#">@ds.computerName</a></div>
+                                <div class="col created_on">@ds.machineStatus.scanStarted</div>
+                                <div class="col created_on">@ds.machineStatus.scanEnded</div>
+                                <div class="col data_LU_table" style="max-width: 7%;">@ds.piiCount</div>
+                                <div class="col data_LU_table" style="max-width:6%;">@ds.active</div>
+                                <div class="col ServerShare" style="max-width:8%;"><a href="@Url.Content("/DataType/Index?CredId=" + ds.id + "&dataSetIndexId=" + ds.dataSetIndexId + "&dataSetId=" + ViewBag.dataSetId)" title="Types of Data">Data Match</a></div>
+                                <div class="col ServerShare" style="max-width:10%;"><a href="@Url.Content("/ExcludeDirectory/Index?CredId=" + ds.id + "&dataSetIndexId=" + ds.dataSetIndexId + "&dataSetId=" + ViewBag.dataSetId)" title="Exclude Directory">Exclude Directory</a></div>
+                                <div class="col ServerShare" style="max-width:10%;"><a href="@Url.Content("/SearchPattern/Index?CredId=" + ds.id + "&dataSetIndexId=" + ds.dataSetIndexId + "&dataSetId=" + ViewBag.dataSetId)" title="Search Results"> Results</a></div>
+                                <div class="col ServerShare" style="max-width:8%;"><a href="@Url.Content("/MachineNotification/Index?credId=" + ds.id + "&dataSetIndexId=" + ds.dataSetIndexId + "&dataSetId=" + ViewBag.dataSetId)" title="Search Results">Recipients</a></div>
+                                <div class="actions">
+                                    <a href="@Url.Content("/ViewMachines/Edit?id=" + ds.id + "&dataSetIndexId=" + ds.dataSetIndexId + "&dataSetId=" + ViewBag.dataSetId)" title="edit" class="edit_a"><img src="/images/edit.svg"></a>
+                                    <a onclick="Confirm('Confirm', 'Are you sure you want to delete?', 'confirm', 'Cancel', '@Url.Content("/ViewMachines/Delete?id=" + ds.id + "&dataSetIndexId=" + ds.dataSetIndexId + "&dataSetId=" + ViewBag.dataSetId)');" class="delete_a" href="#" title="delete"><img src="/images/trash.svg"></a>
+                                </div>
+                            </div>
+
+                        PIIFound = PIIFound + 1;
+                    }
+                </div>
+                @if (Model.ViewMachinesViewList.Count == 0)
+                {
+                    <div class="common_list">
+                        No Machines found.
+                    </div>
+                }
+                @if (Model.pagingHeaders.TotalPages > 1)
+                {
+                <div class="w-100 float-left p-3">
+                    <ul class="pagination">
+                        @if (Model.pagingHeaders.PreviousPage == "Yes")
+                        {
+                            <li class="page-item"><a class="page-link" href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pagingHeaders.CurrentPage - 1)&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)">Previous</a></li>
+                        }
+                        @{ 
+                            var startPage = Model.pagingHeaders.CurrentPage - 5;
+                            var endPage = Model.pagingHeaders.CurrentPage + 4;
+                            if (startPage <= 0)
+                            {
+                                endPage -= (startPage - 1);
+                                startPage = 1;
+                            }
+                            if (endPage > Model.pagingHeaders.TotalPages)
+                            {
+                                endPage = Model.pagingHeaders.TotalPages;
+                                if (endPage > 10)
+                                {
+                                    startPage = endPage - 9;
+                                }
+                            }
+                        }
+                        @for (var page = startPage; page <= endPage; page++)
+                        {
+                            <li class="page-item @(Model.pagingHeaders.CurrentPage == page ? "active" : "")">
+                                <a class="page-link" href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(page)&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)">@page</a>
+                            </li>
+                        }
+                        
+                        @if (Model.pagingHeaders.NextPage == "Yes")
+                        {
+                            <li class="page-item"><a class="page-link" href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pagingHeaders.CurrentPage + 1)&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pageNumberdb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)">Next</a></li>
+                        }
+                    </ul>
+                </div>
+                }
+            </div>
+            <div>
+                <div class="twitter_data_hd">
+                    <h2 class="heading_in"> Databases </h2>
+                </div>
+                <div class="sort_by mt-0">
+                    <div class="search_box ml-0">
+                        <input type="text" class="serch" id="ss-name-filterdatabase" value="@(Model.Searchdb)">
+                        <button type="button" class="search_btn" onclick="searchdatabase();"></button>
+                    </div>
+                    <div class="sort">
+                        <ul class="sort_ul ml-2">
+                            <li><a href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&pageNumberdb=1&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)" id="statusofdball" title="Name" class="@(Model.isActivedb==string.Empty ? "active":"")">All</a></li>
+                            <li><a href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&pageNumberdb=1&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=true&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)" id="statusofdbactive" title="Name" class="@(Model.isActivedb=="true" ? "active":"")">Active</a></li>
+                            <li><a href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&pageNumberdb=1&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=false&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)" id="statusofdbnotactive" title="Name" class="@(Model.isActivedb=="false" ? "active":"")">Not Active</a></li>
+                        </ul>
+                    </div>
+                    @if (Model.pagingHeadersdb.TotalPages > 1)
+                    {
+                        <div class="add_data">
+                            <div class="mt-3"> Records: <b>@(Model.ViewMachinesViewListdb.Count() * Model.pagingHeadersdb.CurrentPage) </b> out of @Model.pagingHeadersdb.TotalCount </div>
+                        </div>
+                    }
+                </div>
+                @if (Model.pagingHeadersdb.TotalPages > 1)
+                {
+                    <div class="sort_by mt-0 pt-0">
+                        <div class="sort">
+                            <div class="dropdown">
+                                <a type="button" class="btn dropdown-toggle border" data-toggle="dropdown" style="font-size:12px"> @Model.pageSizedb rows per page </a>
+                                <div class="dropdown-menu" style="font-size:12px"> 
+                                <a class="dropdown-item" href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&pageNumberdb=1&pageSizedb=10&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)">10 rows per page</a> 
+                                <a class="dropdown-item" href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&pageNumberdb=1&pageSizedb=20&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)">20 items per page</a> 
+                                <a class="dropdown-item" href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&pageNumberdb=1&pageSizedb=50&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)">50 items per page</a> </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="list_main pb-2">
+                    <div class="common_list list_headimng">
+                        <div class="col-2 ServerShare" style="max-width:14%;"><a href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&pageNumberdb=1&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb=="server" ? "server_desc":"server")">Database Instance</a></div>
+                        <div class="col ServerShare" style="max-width:10%;"><a href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&pageNumberdb=1&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb=="domainname" ? "domainname_desc":"domainname")">Database/Service</a></div>
+                        <div class="col created_on" style="max-width:10%;"><a href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&pageNumberdb=1&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb=="scanstarted" ? "scanstarted_desc":"scanstarted")">Scan Started</a></div>
+                        <div class="col created_on" style="max-width:10%;"><a href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&pageNumberdb=1&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb=="scanended" ? "scanended_desc":"scanended")">Scan Ended</a></div>
+                        <div class="col ServerShare" style="max-width: 10%;"><a href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&pageNumberdb=1&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb=="pii" ? "pii_desc":"pii")">PII Found</a></div>
+                        <div class="col data_LU_table" style="max-width:8%;">Active</div>
+                        <div class="col ServerShare" style="max-width:10%;">Data Type</div>
+                        <div class="col ServerShare" style="max-width:8%;">Results</div>
+                        <div class="col ServerShare" style="max-width:10%;">Notify</div>
+                        <div class="actions">Actions</div>
+                    </div>
+                    <div class="ss-boxdatabase">
+                        @foreach (DataSense_UI.Models.DTO.ViewMachines ds in Model.ViewMachinesViewListdb)
+                        {
+                            <div class="common_list" data-name="@ds.computerName | @ds.active">
+                                    <div class="col-2 ServerShare" style="max-width:14%;"><a href="#">@ds.computerName</a></div>
+                                    <div class="col data_LU_table" style="max-width:10%;">@ds.domainName</div>
+                                    <div class="col created_on" style="max-width:10%;">@ds.machineStatus.scanStarted</div>
+                                    <div class="col created_on" style="max-width:10%;">@ds.machineStatus.scanEnded</div>
+                                    <div class="col data_LU_table" style="max-width: 10%;">@ds.piiCount</div>
+                                    <div class="col data_LU_table" style="max-width:8%;">@ds.active</div>
+                                    <div class="col ServerShare" style="max-width:10%;"><a href="@Url.Content("/DataType/Index?CredId=" + ds.id + "&dataSetIndexId=" + ds.dataSetIndexId + "&dataSetId=" + ViewBag.dataSetId)" title="Types of Data">Data Match</a></div>
+                                    <div class="col ServerShare" style="max-width:8%;"><a href="@Url.Content("/SearchPattern/Index?CredId=" + ds.id + "&dataSetIndexId=" + ds.dataSetIndexId + "&dataSetId=" + ViewBag.dataSetId)" title="Search Results"> Results</a></div>
+                                    <div class="col ServerShare" style="max-width:10%;"><a href="@Url.Content("/MachineNotification/Index?credId=" + ds.id + "&dataSetIndexId=" + ds.dataSetIndexId + "&dataSetId=" + ViewBag.dataSetId)" title="Search Results">Recipients</a></div>
+                                    <div class="actions">
+                                        <a href="@Url.Content("/ViewMachines/Edit?id=" + ds.id + "&dataSetIndexId=" + ds.dataSetIndexId + "&dataSetId=" + ViewBag.dataSetId)" title="edit" class="edit_a"><img src="/images/edit.svg"></a>
+                                        <a onclick="Confirm('Confirm', 'Are you sure you want to delete?', 'confirm', 'Cancel', '@Url.Content("/ViewMachines/Delete?id=" + ds.id + "&dataSetIndexId=" + ds.dataSetIndexId + "&dataSetId=" + ViewBag.dataSetId)');" class="delete_a" href="#" title="delete"><img src="/images/trash.svg"></a>
+                                    </div>
+                                </div>
+
+                            PIIFound = PIIFound + 1;
+                        }
+                    </div>
+                    @if (Model.ViewMachinesViewListdb.Count == 0)
+                    {
+                        <div class="common_list">
+                            No Databases found.
+                        </div>
+                    }
+                </div>
+                @if (Model.pagingHeadersdb.TotalPages > 1)
+                {
+                <div class="w-100 float-left p-3">
+                    <ul class="pagination">
+                        @if (Model.pagingHeadersdb.PreviousPage == "Yes")
+                        {
+                            <li class="page-item"><a class="page-link" href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pagingHeadersdb.CurrentPage - 1)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)">Previous</a></li>
+                        }
+                        @{
+                            var startPagedb = Model.pagingHeadersdb.CurrentPage - 5;
+                            var endPagedb = Model.pagingHeadersdb.CurrentPage + 4;
+                            if (startPagedb <= 0)
+                            {
+                                endPagedb -= (startPagedb - 1);
+                                startPagedb = 1;
+                            }
+                            if (endPagedb > Model.pagingHeadersdb.TotalPages)
+                            {
+                                endPagedb = Model.pagingHeadersdb.TotalPages;
+                                if (endPagedb > 10)
+                                {
+                                    startPagedb = endPagedb - 9;
+                                }
+                            }
+                        }
+                        @for (var pagedb = startPagedb; pagedb <= endPagedb; pagedb++)
+                        {
+                            <li class="page-item @(Model.pagingHeadersdb.CurrentPage == pagedb ? "active" : "")">
+                                <a class="page-link" href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&pageNumberdb=@(pagedb)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)">@pagedb</a>
+                            </li>
+                        }
+                       
+                        @if (Model.pagingHeadersdb.NextPage == "Yes")
+                        {
+                            <li class="page-item"><a class="page-link" href="/ViewMachines/Index?dataSetIndexId=@(ViewBag.dataSetIndexId)&dataSetId=@(ViewBag.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&pageNumberdb=@(Model.pagingHeaders.CurrentPage + 1)&pageSizedb=@(Model.pageSizedb)&Search=@(Model.Search)&Searchdb=@(Model.Searchdb)&isActive=@(Model.isActive)&isActivedb=@(Model.isActivedb)&sortby=@(Model.sortby)&sortbydb=@(Model.sortbydb)">Next</a></li>
+                        }
+                    </ul>
+                </div>
+                            }
+            </div>
+        </div>
+    </div>
+</div>

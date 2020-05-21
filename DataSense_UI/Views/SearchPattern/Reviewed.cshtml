@@ -1,0 +1,201 @@
+﻿@model DataSense_UI.Models.ViewModels.SearchPatternViewModel
+@{
+    ViewBag.Title = "Reviewed";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function searchserver() {
+        var txtserver = document.getElementById("ss-name-filterserver").value;
+        window.location.href = "/SearchPattern/Reviewed?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=1&pageSize=@(Model.pageSize)&Search=" + txtserver + "&sortby=@(Model.sortby)";
+    }
+    $(document).ready(function () {
+
+        $('#ss-name-filterserver').on('change', function () {
+            window.location.href = "/SearchPattern/Reviewed?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=1&pageSize=@(Model.pageSize)&Search=" + $(this).val() + "&sortby=@(Model.sortby)";
+        });
+
+        $('#select_all').on('click', function () {
+            if (this.checked) {
+                $('.checkbox').each(function () {
+                    this.checked = true;
+                });
+            } else {
+                $('.checkbox').each(function () {
+                    this.checked = false;
+                });
+            }
+        });
+
+        $('.checkbox').on('click', function () {
+            if ($('.checkbox:checked').length == $('.checkbox').length) {
+                $('#select_all').prop('checked', true);
+            } else {
+                $('#select_all').prop('checked', false);
+            }
+        });
+    });
+</script>
+@using (Html.BeginForm("MarkSensitive", "SearchPattern", FormMethod.Post, new { @class = "container-fluid h-100 main_app", role = "form" }))
+{
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/DataSet" title="Data Sets">Data Sets</a> / </li>
+                    <li> <a href="/DataSetIndex/Index?id=@Model.dataSetId" title="View Indexes"> @Model.DataSetName </a> / </li>
+                    <li> <a href="/ViewMachines/Index?dataSetIndexId=@Model.dataSetIndexId&dataSetId=@Model.dataSetId" title="View Indexes"> View Machines </a> / </li>
+                    <li> <a href="/SearchPattern/Index?CredId=@Model.dataSetIndexCredId&dataSetIndexId=@Model.dataSetIndexId&dataSetId=@Model.dataSetId" title="Search Pattern"> Search Pattern </a> / </li>
+                    <li> View Reviewed </li>
+                </ul>
+            </div>
+            <div style="padding-left:25px;">
+                <input type="hidden" value="@Model.dataSetIndexCredId" name="CredId" />
+                <input type="hidden" value="@Model.dataSetIndexId" name="dataSetIndexId" />
+                <input type="hidden" value="@Model.dataSetId" name="dataSetId" />
+                <button type="submit" class="save_btn sav_selet" style="margin-left:15px;">Mark as Sensitive</button>
+            </div>
+            <div class="sort_by mt-0">
+                <div class="search_box ml-0">
+                    <input type="text" class="serch" id="ss-name-filterserver" value="@Model.Search">
+                    <button type="button" class="search_btn" onclick="searchserver();"></button>
+                </div>
+                @if (Model.pagingHeaders.TotalPages > 1)
+                {
+                    <div class="add_data">
+                        <div class="mt-3"> Records: <b>@(Model.objreviewed.Count() * Model.pagingHeaders.CurrentPage)</b> out of @Model.pagingHeaders.TotalCount </div>
+                    </div>
+                }
+            </div>
+            @if (Model.pagingHeaders.TotalPages > 1)
+            {
+                <div class="sort_by mt-0 pt-0">
+                    <div class="sort">
+                        <div class="dropdown">
+                            <a type="button" class="btn dropdown-toggle border" data-toggle="dropdown" style="font-size:12px"> @Model.pageSize rows per page </a>
+                            <div class="dropdown-menu" style="font-size:12px">
+                                <a class="dropdown-item" href="/SearchPattern/Reviewed?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=1&pageSize=10&Search=@(Model.Search)&sortby=@(Model.sortby)">10 rows per page</a>
+                                <a class="dropdown-item" href="/SearchPattern/Reviewed?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=1&pageSize=20&Search=@(Model.Search)&sortby=@(Model.sortby)">20 items per page</a>
+                                <a class="dropdown-item" href="/SearchPattern/Reviewed?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=1&pageSize=50&Search=@(Model.Search)&sortby=@(Model.sortby)">50 items per page</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (Model.pagingHeaders.TotalPages > 1)
+            {
+                <div class="w-100 float-left p-3">
+                    <ul class="pagination">
+                        @if (Model.pagingHeaders.PreviousPage == "Yes")
+                        {
+                        <li class="page-item"><a class="page-link" href="/SearchPattern/Reviewed?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(Model.pagingHeaders.CurrentPage - 1)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby)">Previous</a></li>
+                        }
+                        @{
+                            var startPage = Model.pagingHeaders.CurrentPage - 5;
+                            var endPage = Model.pagingHeaders.CurrentPage + 4;
+                            if (startPage <= 0)
+                            {
+                                endPage -= (startPage - 1);
+                                startPage = 1;
+                            }
+                            if (endPage > Model.pagingHeaders.TotalPages)
+                            {
+                                endPage = Model.pagingHeaders.TotalPages;
+                                if (endPage > 10)
+                                {
+                                    startPage = endPage - 9;
+                                }
+                            }
+                        }
+                        @for (var page = startPage; page <= endPage; page++)
+                        {
+                        <li class="page-item @(Model.pagingHeaders.CurrentPage == page ? "active" : "")">
+                            <a class="page-link" href="/SearchPattern/Reviewed?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(page)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby)">@page</a>
+                        </li>
+                        }
+
+                        @if (Model.pagingHeaders.NextPage == "Yes")
+                        {
+                        <li class="page-item"><a class="page-link" href="/SearchPattern/Reviewed?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(Model.pagingHeaders.CurrentPage + 1)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby)">Next</a></li>
+                        }
+                    </ul>
+                </div>
+            }
+            <div class="list_main chk_box_hr" style="padding-bottom:25px;">
+                <div class="common_list list_headimng">
+                    <div class="data_name" style="width:3%;"><label class="select_m"><input type="checkbox" id="select_all" /><span class="checkmark"></span></label></div>
+                    <div class="data_name" style="width:67%;"><a href="/SearchPattern/Reviewed?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby=="filename"?"filename_desc":"filename")"> File Name </a></div>
+                    <div class="data_name" style="width:15%;"><a href="/SearchPattern/Reviewed?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby=="createdby"?"createdby_desc":"createdby")"> Created By</a> </div>
+                    <div class="data_name" style="width:15%;"><a href="/SearchPattern/Reviewed?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(Model.pageNumber)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby=="createdon"?"createdon_desc":"createdon")"> Created On  </a></div>
+                </div>
+                @if (Model.objreviewed.Count == 0)
+                {
+                    <div class="common_list" style="padding-left:15px;">
+                        No Data found.
+                    </div>
+                }
+                <div class="ss-boxservers">
+                    @foreach (var item in Model.objreviewed)
+                    {
+                        <div class="common_list chk_box_hr" style="padding-left:12px;" data-name="@item.fileName">
+                            <div class="data_name" style="width:3%;">
+                                <label class="select_m"><input type="checkbox" class="checkbox" name="chkMarkSensitive" value="@item.quarantineId" /><span class="checkmark"></span></label>
+                            </div>
+                            <div class="data_name" style="width:67%;">
+                                @item.fileName
+                            </div>
+                            <div class="data_name" style="width:15%;">
+                                @item.createdByUser
+                            </div>
+                            <div class="data_name" style="width:15%;">
+                                @item.createdOn
+                            </div>
+                        </div>
+                    }
+                </div>
+                @if (Model.pagingHeaders.TotalPages > 1)
+                {
+                    <div class="w-100 float-left p-3">
+                        <ul class="pagination">
+                            @if (Model.pagingHeaders.PreviousPage == "Yes")
+                            {
+                            <li class="page-item"><a class="page-link" href="/SearchPattern/Reviewed?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(Model.pagingHeaders.CurrentPage - 1)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby)">Previous</a></li>
+                            }
+                            @{
+                                var startPage1 = Model.pagingHeaders.CurrentPage - 5;
+                                var endPage1 = Model.pagingHeaders.CurrentPage + 4;
+                                if (startPage1 <= 0)
+                                {
+                                    endPage1 -= (startPage1 - 1);
+                                    startPage1 = 1;
+                                }
+                                if (endPage1 > Model.pagingHeaders.TotalPages)
+                                {
+                                    endPage1 = Model.pagingHeaders.TotalPages;
+                                    if (endPage1 > 10)
+                                    {
+                                        startPage1 = endPage1 - 9;
+                                    }
+                                }
+                            }
+                            @for (var page = startPage1; page <= endPage1; page++)
+                            {
+                            <li class="page-item @(Model.pagingHeaders.CurrentPage == page ? "active" : "")">
+                                <a class="page-link" href="/SearchPattern/Reviewed?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(page)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby)">@page</a>
+                            </li>
+                            }
+
+                            @if (Model.pagingHeaders.NextPage == "Yes")
+                            {
+                            <li class="page-item"><a class="page-link" href="/SearchPattern/Reviewed?CredId=@(Model.dataSetIndexCredId)&dataSetIndexId=@(Model.dataSetIndexId)&dataSetId=@(Model.dataSetId)&pageNumber=@(Model.pagingHeaders.CurrentPage + 1)&pageSize=@(Model.pageSize)&Search=@(Model.Search)&sortby=@(Model.sortby)">Next</a></li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+            <div style="padding-left:10px;">
+                <button type="button" class="save_btn sav_selet" style="margin-left:15px;" onclick="location.href = '/SearchPattern/index?CredId=@Model.dataSetIndexCredId&dataSetIndexId=@Model.dataSetIndexId&dataSetId=@Model.dataSetId';">Go Back</button>
+            </div>
+        </div>
+    </div>
+}

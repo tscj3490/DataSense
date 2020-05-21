@@ -1,0 +1,138 @@
+﻿@model DataSense_UI.Models.ViewModels.ViewMachinesViewModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section documentHeadAdditions {
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
+}
+<script>
+    $(document).ready(function () {
+        $("#radiosql").hide();
+        $("input:text,form").attr("autocomplete", "off");
+
+        $("input[type=radio]").click(function () {
+            if (this.id != "ORACLE" && this.id != "MSSQL") {
+                var Selectedvalue = $(this).val();
+                if (Selectedvalue == 'True') {
+                    $('.text1').text('Database Instance');
+                    $('.text2').text('Database Name');
+                    $('.chk1').hide();
+                    $('.chk1').prop('checked', false);
+                    $("#radiosql").show();
+                  
+                } else {
+                    $('.text1').text('Computer Name');
+                    $('.text2').text('Domain Name');
+                    $('.chk1').show();
+                    $("#radiosql").hide();
+                }
+            }
+            else if (this.id == "ORACLE") {
+                $('.text2').text('Service Name');
+            }
+            else if (this.id == "MSSQL") {
+                $('.text2').text('Database Name');
+            }
+        });
+        isdatabase();
+    });
+    function isdatabase() {
+        var Selectedvalue = '@Model.viewMachinesPatch.isDatabase';
+        if (Selectedvalue == 'True') {
+            $('.text1').text('Database Instance');
+            $('.text2').text('Database Name');
+            $('.chk1').hide();
+            $('.chk1').prop('checked', false);
+            $("#radiosql").show();
+            $("#radiosql").prop("checked", true);
+        } else {
+            $('.text1').text('Computer Name');
+            $('.text2').text('Domain Name');
+            $('.chk1').show();
+            $("#radiosql").hide();
+        }
+    }
+</script>
+@using (Html.BeginForm("Patch", "ViewMachines", FormMethod.Post, new { @class = "container-fluid h-100 main_app", role = "form", autocomplete = "off" }))
+{
+    <div class="container-fluid h-100 main_app">
+        <div class="row">
+            @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+            <div class="col-lg-10 rt_main">
+                <div class="heading_top">
+                    <ul class="pagination_ul">
+                        <li> <a href="/DataSet" title="Data Set "> Data Sets </a> / </li>
+                        <li> <a href="/DataSetIndex/Index?id=@ViewBag.dataSetId" title="View Indexes"> @Model.DataSetName</a> / </li>
+                        <li> <a href="/ViewMachines/Index?dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId" title="View Indexes"> View Indexes </a> / </li>
+                        <li> Edit View Machines </li>
+                    </ul>
+                </div>
+                <div class="twitter_data_hd">
+                    <h2 class="heading_in"> @Model.DataSetName </h2>
+                </div>
+                <div class="edit_form">
+                    <div class="form-group">
+                        @if (Model.viewMachinesPatch.isDatabase == true)
+        {
+                @Html.RadioButtonFor(m => m.viewMachinesPatch.isDatabase, false, false) <label class="name_lbl"> Server </label>
+                @Html.RadioButtonFor(m => m.viewMachinesPatch.isDatabase, true, true) <label class="name_lbl"> Database </label>
+}
+else
+{
+                @Html.RadioButtonFor(m => m.viewMachinesPatch.isDatabase, false, true) <label class="name_lbl"> Server </label>
+                @Html.RadioButtonFor(m => m.viewMachinesPatch.isDatabase, true, false) <label class="name_lbl"> Database </label>
+}
+                    </div>
+                    <div class="form-group">
+                        <label class="name_lbl text1"> Computer Name </label>
+                        @Html.TextBoxFor(m => m.viewMachinesPatch.computerName, new { @class = "form-control", required = "required", autocapitalize = "none" })
+                        @Html.ValidationMessageFor(m => m.viewMachinesPatch.computerName)
+                        <input type="hidden" name="dataSetIndexCredId" value="@Model.dataSetIndexCredId" />
+                        <input type="hidden" name="dataSetIndexId" value="@ViewBag.dataSetIndexId" />
+                        <input type="hidden" name="dataSetId" value="@ViewBag.dataSetId" />
+                    </div>
+                    <div class="form-group">
+                        <label class="name_lbl text2"> Domain Name </label>
+                        @Html.TextBoxFor(m => m.viewMachinesPatch.domainName, new { @class = "form-control", autocapitalize = "none" })
+                    </div>
+                    <div class="form-group" id="radiosql">
+                        @Html.RadioButtonFor(m => m.viewMachinesPatch.databaseType, "MSSQL", new { @id = "MSSQL" }) <label class="name_lbl"> MSSQL </label>
+                        @Html.RadioButtonFor(m => m.viewMachinesPatch.databaseType, "ORACLE", new { @id = "ORACLE" }) <label class="name_lbl"> ORACLE </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="name_lbl"> Username </label>
+                        @Html.TextBoxFor(m => m.viewMachinesPatch.userName, new { @class = "form-control", autocapitalize = "none", autocomplete = "off", })
+                    </div>
+                    <div class="form-group">
+                        <label class="name_lbl"> Password </label>
+                        @Html.TextBoxFor(m => m.viewMachinesPatch.passWord, new { type = "password", @class = "form-control", autocapitalize = "none", autocomplete = "new-password" })
+                    </div>
+                    <div class="checkbox_main chk1">
+                        <label class="select_m">
+                            <span class="chkbox_txt"> WMI </span>
+
+                            @Html.CheckBoxFor(m => m.viewMachinesPatch.isWmi, new { })
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="checkbox_main">
+                        <label class="select_m">
+                            <span class="chkbox_txt"> Active </span>
+                            @Html.CheckBoxFor(m => m.viewMachinesPatch.active, new { })
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="btns">
+                        <button type="submit" class="save_btn">Save</button>
+                        <button type="button" class="cancel_btn" onclick="location.href = '/ViewMachines/Index?dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId';">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

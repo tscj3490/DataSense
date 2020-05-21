@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>checkOff</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="24" height="24" rx="4"></rect>
+        <filter x="-6.2%" y="-6.2%" width="112.5%" height="112.5%" filterUnits="objectBoundingBox" id="filter-2">
+            <feGaussianBlur stdDeviation="0.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="2" dy="2" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.284675045 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="checkOff">
+            <g id="Rectangle-3">
+                <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                <rect stroke="#28A3FF" stroke-width="2" stroke-linejoin="square" x="1" y="1" width="22" height="22" rx="4"></rect>
+            </g>
+            <g id="flaticon1528784262-svg" transform="translate(5.052632, 6.315789)" fill="#DEDEDE" fill-rule="nonzero">
+                <path d="M14.5882486,0.745161722 L14.1823762,0.395869931 C13.5086628,-0.184074566 12.496269,-0.119429888 11.9014615,0.541289497 L5.1117229,8.08267325 L3.06220977,6.31448031 C2.38920717,5.73388565 1.37665892,5.79723001 0.781140478,6.45723731 L0.422277875,6.85501261 C0.131256407,7.17740008 -0.0198485168,7.60266794 0.00209554039,8.03706903 C0.0242559475,8.47122245 0.217610908,8.87881209 0.539941292,9.17020851 L4.29679479,12.6164076 C4.62206135,12.9223862 5.05797541,13.0819546 5.5035325,13.0582701 C5.94908958,13.0346476 6.36565578,12.8295988 6.65670816,12.4908025 L14.7619466,3.05695201 C15.0451176,2.72735084 15.1858996,2.29861544 15.1532617,1.8651122 C15.1206546,1.43129935 14.9174712,1.02850851 14.5882486,0.745161722 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,136 @@
+﻿@model DataSense_UI.Models.ViewModels.DataSetIndexViewModel
+@section documentHeadAdditions {
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
+}
+<script type="text/javascript">
+    function ProcType() {
+        var ProcTypeval = $("#dataSetIndexPatch_procType").val();
+        if (ProcTypeval == 'P') {
+            $(".ProcTypeP").hide();
+            $(".ProcTypeIndex").html('Search Name');
+            $("#dataSetIndexPatch_limitRecords").val('');
+            $("#dataSetIndexPatch_shingleSize").val('0');
+            $("#dataSetIndexPatch_rowsPerBand").val('0');
+        } else {
+            $(".ProcTypeP").show();
+            $(".ProcTypeIndex").html('Indexed Columns');
+            var err = false;
+            var err = false;
+            var shingleSize = $("#dataSetIndexPatch_shingleSize").val();
+
+            if (!/^[0-9]+$/.test(shingleSize)) {
+                $('#errshingleSize').show();
+                err = true;
+            } else {
+                if (parseInt(shingleSize, 10) < parseInt(2, 10) || parseInt(shingleSize, 10) > parseInt(20, 10)) {
+                    $('#errshingleSize').show();
+                    err = true;
+                } else {
+                    $('#errshingleSize').hide();
+                    err = false;
+                }
+            }
+
+            var rowsPerBand = $("#dataSetIndexPatch_rowsPerBand").val();
+            if (!/^[0-9]+$/.test(rowsPerBand)) {
+                $('#errrowsPerBand').show();
+                err1 = true;
+            } else {
+                if (parseInt(rowsPerBand, 10) < parseInt(2, 10) || parseInt(rowsPerBand, 10) > parseInt(20, 10)) {
+                    $('#errrowsPerBand').show();
+                    err1 = true;
+                } else {
+                    $('#errrowsPerBand').hide();
+                    err1 = false;
+                }
+            }
+
+            if (err || err1) {
+                return false;
+            }
+        }
+    }
+    $(document).ready(function () {
+        ProcType();
+    });
+</script>
+@using (Html.BeginForm("Patch", "DataSetIndex", FormMethod.Post, new { @class = "container-fluid h-100 main_app", role = "form" }))
+{
+    <div class="container-fluid h-100 main_app">
+        <div class="row">
+            @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+            <div class="col-lg-10 rt_main">
+                <div class="heading_top">
+                    <ul class="pagination_ul">
+                        <li> <a href="/DataSet" title="Data Set "> Data Set </a> / </li>
+                        <li> <a href="/DataSetIndex/Index?id=@Model.dataSetIndexPatch.dataSetId" title="View Indexes"> View Indexes </a> / </li>
+                        <li>@Model.DataSetName</li>
+                    </ul>
+                </div>
+                <div class="twitter_data_hd">
+                    <h2 class="heading_in"> @Model.DataSetName </h2>
+                </div>
+                <div class="edit_form">
+                    <div class="form-group">
+                        <label class="name_lbl ProcTypeIndex"> Indexed Columns </label>
+                        @Html.TextAreaFor(m => m.dataSetIndexPatch.dataSetColumns, new { @class = "form-control", maxlength = "50", required = "required", autocapitalize = "none" })
+                        @Html.ValidationMessageFor(m => m.dataSetIndexPatchView.dataSetColumns)
+                        @Html.HiddenFor(m => m.dataSetIndexPatchView.id)
+                        @Html.HiddenFor(m => m.dataSetIndexPatch.dataSetId)
+                    </div>
+                    <div class="form-group ProcTypeP">
+                        <label class="name_lbl"> Limit Records </label>
+                        @Html.TextBoxFor(m => m.dataSetIndexPatch.limitRecords, new { @class = "form-control", autocapitalize = "none" })
+                    </div>
+                    <div class="form-group ProcTypeP">
+                        <label class="name_lbl"> Single Size </label>
+                        @Html.TextBoxFor(m => m.dataSetIndexPatch.shingleSize, new { @class = "form-control", maxlength = "50", required = "required", autocapitalize = "none" })
+                        <span class="field-validation-error error" id="errshingleSize" style="display:none;">Shingle Size must be between 2 and 20</span>
+                    </div>
+                    <div class="form-group ProcTypeP">
+                        <label class="name_lbl"> Row per band </label>
+                        @Html.TextBoxFor(m => m.dataSetIndexPatch.rowsPerBand, new { @class = "form-control", maxlength = "50", required = "required", autocapitalize = "none" })
+                        <span class="field-validation-error error" id="errrowsPerBand" style="display:none;">Rows Per band must be between 2 and 20</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="name_lbl"> Proc Type </label>
+                        <div class="select_Main">
+                            @{
+                                var listItems2 = new List<SelectListItem>();
+                                listItems2.Add(new SelectListItem { Text = "S", Value = "S" });
+                                listItems2.Add(new SelectListItem { Text = "B", Value = "B" });
+                                listItems2.Add(new SelectListItem { Text = "P", Value = "P" });
+                            }
+                            @Html.DropDownListFor(m => m.dataSetIndexPatch.procType, listItems2, new { @class = "select_Menu", @onchange = "return ProcType()" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="name_lbl"> Node Url </label>
+                        @Html.TextBoxFor(m => m.dataSetIndexPatch.nodeUrl, new { @class = "form-control", autocapitalize = "none" })
+                    </div>
+                    <div class="form-group">
+                        <label class="name_lbl"> Recent Status </label>
+                        <div class="name_lbl">
+                            @Model.dataSetIndexPatchView.status
+                        </div>
+                    </div>
+                    <div class="checkbox_main">
+                        <label class="select_m">
+                            <span class="chkbox_txt"> Active </span>
+                            @Html.CheckBoxFor(m => m.dataSetIndexPatch.active, new { })
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="btns">
+                        <button type="submit" class="save_btn" onclick="return ProcType();">Save</button>
+                        <button type="button" class="cancel_btn" onclick="location.href = '/DataSetIndex/Index?id=@Model.dataSetIndexPatchView.dataSetId';">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

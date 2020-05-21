@@ -1,0 +1,127 @@
+﻿@model DataSense_UI.Models.ViewModels.DataTypeViewModel
+
+<div class="container-fluid h-100 main_app">
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/DataSet" title="Data Sets">Data Sets</a> / </li>
+                    <li> <a href="/DataSetIndex/Index?id=@ViewBag.dataSetId" title="View Indexes"> @Model.DataSetName </a> / </li>
+                    <li> <a href="/ViewMachines/Index?dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId" title="View Indexes"> View Machines </a> / </li>
+                    <li> View Data Types </li>
+                </ul>
+            </div>
+
+            @using (Html.BeginForm("PredefineddatatypesPost", "DataType", FormMethod.Post, new { @class = "container-fluid main_app", role = "form" }))
+            {
+                <div class="twitter_data_hd">
+                    <h2 class="heading_in">
+                        Predefined data types
+                    </h2>
+                </div>
+
+                <input type="hidden" name="CredId" value="@ViewBag.dataSetIndexCredId" />
+                    <input type="hidden" name="dataSetIndexId" value="@ViewBag.dataSetIndexId" />
+                    <input type="hidden" name="dataSetId" value="@ViewBag.dataSetId" />
+                    <div class="row schedule_time predefnd_dt">
+                        <div class="col-md-12">
+                            <div class="">
+                                <div class="chk_box_hr">
+                                    @for (int i = 0; i < Model.predefinedDataTypeViewList.Count(); i++)
+                                    {
+                                        <div class="form-check">
+                                            <div class="icon_chkbox">
+                                                @if (Model.predefinedDataTypeViewList[i].dataTypeDesc.ToLower() == "social security")
+                                                {
+                                                    <a href="/Webhooks/Index?CredId=@ViewBag.dataSetIndexCredId&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId&DataSetIndexExpID=@Model.predefinedDataTypeViewList[i].id">Manage Webhooks</a>
+                                                    <img src="/images/ssn.svg">
+                                                }
+                                                else if (Model.predefinedDataTypeViewList[i].dataTypeDesc.ToLower() == "credit cards")
+                                                {
+                                                    <a href="/Webhooks/Index?CredId=@ViewBag.dataSetIndexCredId&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId&DataSetIndexExpID=@Model.predefinedDataTypeViewList[i].id">Manage Webhooks</a>
+                                                    <img src="/images/cc.svg">
+                                                }
+                                                else if (Model.predefinedDataTypeViewList[i].dataTypeDesc.ToLower() == "us passport")
+                                                {
+                                                    <a href="/Webhooks/Index?CredId=@ViewBag.dataSetIndexCredId&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId&DataSetIndexExpID=@Model.predefinedDataTypeViewList[i].id">Manage Webhooks</a>
+                                                    <img src="/images/passport.svg">
+                                                }
+                                                else if (Model.predefinedDataTypeViewList[i].dataTypeDesc.ToLower() == "driver license")
+                                                {
+                                                    <a href="/Webhooks/Index?CredId=@ViewBag.dataSetIndexCredId&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId&DataSetIndexExpID=@Model.predefinedDataTypeViewList[i].id">Manage Webhooks</a>
+                                                    <img src="/images/dl.svg">
+                                                }
+                                                else if (Model.predefinedDataTypeViewList[i].dataTypeDesc.ToLower() == "birth dates")
+                                                {
+                                                    <a href="/Webhooks/Index?CredId=@ViewBag.dataSetIndexCredId&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId&DataSetIndexExpID=@Model.predefinedDataTypeViewList[i].id">Manage Webhooks</a>
+                                                    <img src="/images/birth-date.svg">
+                                                }
+                                                else if (Model.predefinedDataTypeViewList[i].dataTypeDesc.ToLower() == "bank account")
+                                                {
+                                                    <a href="/Webhooks/Index?CredId=@ViewBag.dataSetIndexCredId&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId&DataSetIndexExpID=@Model.predefinedDataTypeViewList[i].id">Manage Webhooks</a>
+                                                    <img src="~/images/bank-account-number.svg">
+                                                }
+                                                else if (Model.predefinedDataTypeViewList[i].dataTypeDesc.ToLower() == "personal address")
+                                                {
+                                                    <a href="/Webhooks/Index?CredId=@ViewBag.dataSetIndexCredId&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId&DataSetIndexExpID=@Model.predefinedDataTypeViewList[i].id">Manage Webhooks</a>
+                                                    <img src="~/images/p-adress.svg">
+                                                }
+                                            </div>
+                                            <div class="checkbox_main">
+                                                <label class="select_m">
+                                                    <span class="chkbox_txt">
+                                                        @Html.HiddenFor(it => it.predefinedDataTypeViewList[i].credID)
+                                                        @Html.DisplayFor(it => it.predefinedDataTypeViewList[i].dataTypeDesc)
+                                                    </span>
+                                                    @Html.CheckBoxFor(it => it.predefinedDataTypeViewList[i].active)
+                                                    @Html.HiddenFor(it => it.predefinedDataTypeViewList[i].dataTypeDesc)
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <div class="btns">
+                                        <button type="submit" class="save_btn sav_selet">Save Selections</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="twitter_data_hd">
+                        <h2 class="heading_in"> View Data Types</h2>
+                        <div class="add_data">
+                            <a class="add_data_btn" href="@Url.Content("/DataType/Add?CredId="+ Request.QueryString["CredId"] +"&dataSetIndexId="+ ViewBag.dataSetIndexId +"&dataSetId="+ ViewBag.dataSetId)" style="text-decoration:none;">
+                                <span>+</span> Add Data Type
+                            </a>
+                        </div>
+                    </div>
+                    <div class="index_list">
+                        <div class="row index_list_headimng">
+                            <div class="col-3 index_col">Regular Expression</div>
+                            <div class="col">Data Type Desc</div>
+                            <div class="col">Webhooks</div>
+                        </div>
+                        @foreach (DataSense_UI.Models.DTO.RegDataType ds in Model.regdataTypeViewList)
+                        {
+                            <div class="row common_IL">
+                                <div class="col-3 index_col"><a href="#">@ds.regularExpression</a></div>
+                                <div class="col">@ds.dataTypeDesc</div>
+                                <div class="col"><a href="/Webhooks/Index?CredId=@ViewBag.dataSetIndexCredId&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId&DataSetIndexExpID=@ds.id">Manage Webhooks</a></div>
+                                <br />
+                            </div>
+                            <div class="blue_bar">
+                                <ul class="ind_ul">
+                                    <li> <a href="#" class="@(ds.active == true ? "active_btn" : "inactive_btn")"> <span class="dot"></span> @(ds.active == true ? "Active" : "InActive") </a></li>
+                                    <li> <a href="@Url.Content("/DataType/Edit?id="+ ds.id + "&CredId="+ ds.dataSetIndexCredId +"&dataSetIndexId=" + ViewBag.dataSetIndexId + "&dataSetId=" + ViewBag.dataSetId)" class="edit_database" title="Edit Data Type">Edit Data Type</a></li>
+                                    <li> <a href="@Url.Content("/DataType/Delete?id="+ ds.id + "&CredId="+ ds.dataSetIndexCredId +"&dataSetIndexId=" + ViewBag.dataSetIndexId + "&dataSetId=" + ViewBag.dataSetId)" class="delete" title="Edit Data Type">Delete</a></li>
+                                </ul>
+                            </div>
+                        }
+                    </div>
+            }
+        </div>
+    </div>
+</div>
+</div>

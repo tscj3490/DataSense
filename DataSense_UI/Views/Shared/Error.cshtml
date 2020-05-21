@@ -1,0 +1,29 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid h-100 main_app">
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/DataSet" title="Data Sets">Data Sets</a> </li>
+                </ul>
+            </div>
+
+            <div class="twitter_data_hd">
+                <h3>
+                    Application Error:
+                </h3>
+                <h4>
+                    Sorry, an error occurred while processing your request.
+                </h4>
+                <h6>@Html.ActionLink("Go Back To Home Page", "Index", "Authenticate")</h6>
+                <br />
+                <br />
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,226 @@
+﻿@model DataSense_UI.Models.ViewModels.DashboardViewModel
+@using DataSense_UI.Models.DTO
+<div class="container-fluid h-100 main_app">
+    <div class="row">
+
+
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> Dashboard </li>
+                </ul>
+            </div>
+            <div class="row dashboard_main">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-md-4 d-flex">
+                            <div class="db__common db__gradient1">
+                                <div class="db__common-icon"> <img src="/images/herbal-spa-treatment-leaves.svg"> </div>
+                                <div class="db__common-text">
+                                    <div class="db-text">
+                                        <h4>
+                                            Environment <br>
+                                            Tiers
+                                        </h4>
+                                        <span class="db-count count-48"> @Model.dashboardView.noOfTiers</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <div class="db__common db__gradient2">
+                                <div class="db__common-icon"> <img src="/images/server.svg"> </div>
+                                <div class="db__common-text">
+                                    <div class="db-text">
+                                        <h4>
+                                            Total number <br>
+                                            of Servers
+                                        </h4>
+                                        <span class="db-count count-48"> @Model.dashboardView.noOfServers </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <div class="db__common db__gradient3">
+                                <div class="db__common-icon"> <img src="/images/database.svg"> </div>
+                                <div class="db__common-text">
+                                    <div class="db-text">
+                                        <h4>
+                                            Total number <br>
+                                            of Databases
+                                        </h4>
+                                        <span class="db-count count-48"> @Model.dashboardView.noOfDatabases </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 lt-24">
+                    <div class="col-12">
+                        <div class="row">
+                            <h2> Last 24 hours: </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-md-4 d-flex">
+                            <div class="db__common db__gradient4">
+                                <div class="db__common-icon"> <img src="/images/id-card.svg"> </div>
+                                <div class="db__common-text">
+                                    <div class="db-text">
+                                        <h2> Total PII Found </h2>
+                                    </div>
+                                    <div class="db-text">
+                                        <h4> @Model.dashboardView.piiTotalFound </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <div class="db__common db__gradient5">
+                                <div class="db__common-icon"> <img src="/images/storage.svg"> </div>
+                                <div class="db__common-text">
+                                    <div class="db-text">
+                                        <h2> Storage/Share </h2>
+                                    </div>
+                                    @if (Model.dashboardView.servers != null)
+                        {
+                            if (Model.dashboardView.servers.Count > 0)
+                            {
+                                foreach (DataSense_UI.Models.DTO.PIIServerRecordView pirec in Model.dashboardView.servers)
+                                {
+                                    <div class="db-text">
+                                        <h4> @pirec.computerName </h4>
+                                        <span class="db-count"> @pirec.piiFound </span>
+                                    </div>
+
+                    }
+                }
+                else
+                {
+                    <div class="db-text">
+                        <h4> Nothing Found Yet </h4>
+                        <span class="db-count"> &nbsp; </span>
+                    </div>
+    }
+}
+else
+{
+            <div class="db-text">
+                <h4> Nothing Found Yet </h4>
+                <span class="db-count"> &nbsp; </span>
+            </div>
+}
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <div class="db__common db__gradient6">
+                                <div class="db__common-icon"> <img src="/images/server-2.svg"> </div>
+                                <div class="db__common-text">
+                                    <div class="db-text">
+                                        <h2> Database </h2>
+                                    </div>
+                                    @if (Model.dashboardView.databases != null)
+                        {
+                            if (Model.dashboardView.databases.Count > 0)
+                            {
+                                foreach (DataSense_UI.Models.DTO.PIIServerRecordView pirec in Model.dashboardView.databases)
+                                {
+                                    <div class="db-text">
+                                        <h4> @pirec.domainName </h4>
+                                        <span class="db-count"> @pirec.piiFound </span>
+                                    </div>
+
+                    }
+                }
+                else
+                {
+                    <div class="db-text">
+                        <h4> Nothing Found Yet </h4>
+                        <span class="db-count"> &nbsp; </span>
+                    </div>
+    }
+}
+else
+{
+            <div class="db-text">
+                <h4> Nothing Found Yet </h4>
+                <span class="db-count"> &nbsp; </span>
+            </div>
+}
+
+
+
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 envirmnt">
+                    <div class="row">
+                        <div class="col-md-4 d-flex">
+                            <div class="db__common db__gradient7">
+                                <div class="db__common-icon"> <img src="/images/retinal-scan.svg"> </div>
+                                <div class="db__common-text">
+                                    <div class="db-text">
+                                        <h2>
+                                            Last Scanned <br>
+                                            Environment
+                                        </h2>
+                                    </div>
+                                    <div class="db-text">
+                                        <h4>@Model.dashboardView.currentlyScanning </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <div class="db__common db__gradient7">
+                                <!--<div class="db__common-icon"> <img src="/images/retinal-scan.svg"> </div>-->
+                                <div class="db__common-text">
+                                    <div class="db-text">
+                                        <h2>
+                                            Pollers Status
+                                        </h2>
+
+                                    </div>
+                                    @if (Model.dashboardView.pollers != null)
+    {
+        if (Model.dashboardView.pollers.Count > 0)
+        {
+            foreach (PollerHealthView phhealthview in Model.dashboardView.pollers)
+            {
+                                    <div class="db-text">
+                                        <h4> @phhealthview.pollerKey </h4>
+                                        <span class="db-count"> Last Beat: @phhealthview.processLastHealthCheck </span>
+                                        <span class="db-count"> @phhealthview.cpuUsage </span>
+                                        <span class="db-count"> @phhealthview.ramUsage </span>
+                                    </div>
+}
+}
+}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

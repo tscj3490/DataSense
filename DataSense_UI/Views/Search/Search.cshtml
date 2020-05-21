@@ -1,0 +1,146 @@
+﻿@model DataSense_UI.Models.ViewModels.SearchViewModel
+<script type="text/javascript">
+    function SubmitForm(IsType, pageNo) {
+        if (IsType == "Next") {
+            $("#searchPost_pageNo").val(pageNo);
+        } else if (IsType == "Prev") {
+            $("#searchPost_pageNo").val(pageNo);
+        } else {
+            $("#searchPost_pageNo").val(pageNo);
+        }
+        document.forms[0].submit();
+    }
+</script>
+
+@section documentHeadAdditions {
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
+}
+@using (Html.BeginForm("Search", "Search", FormMethod.Post, new { @class = "container-fluid h-100 main_app", role = "form" }))
+{
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/DataSet" title="Data Set"> Data Set </a> / </li>
+                    <li> <a href="/DataSetIndex/Index?id=@Model.dataSetIndexView.dataSetId" title="View Indexes"> View Indexes </a> / </li>
+                    <li> @Model.dataSetIndexView.dataSetColumns / </li>
+                </ul>
+            </div>
+            @*<div class="radio" style="float:left;padding: 15px;">
+                    <label class="radio_fancy">
+
+                        @Html.RadioButton("searchType", "P")
+                        <span class="checkmark"></span>
+                        <h3 class="radio_heading"> Pattern Search </h3>
+                    </label>
+                </div>
+                <br />
+                <div class="radio" style="float:left;padding: 15px;">
+                    <label class="radio_fancy">
+
+                        @Html.RadioButton("searchType", "S")
+                        <span class="checkmark"></span>
+                        <h3 class="radio_heading"> Similarity Search </h3>
+                    </label>
+                </div>*@
+            <div class="twitter_data_hd">
+                <h2 class="heading_in"> Perform your Test Search </h2>
+               
+                <div class="test_serchpagebar">
+                    <div class="sortpage">
+                        <span class="labl_sort"> Search for :</span>
+                    </div>
+                    <div class="search_box">
+                        @*<input type="text" class="serch">*@
+
+                        @Html.TextBoxFor(m => m.searchPost.MatchString, new { @class = "serch", maxlength = "100", required = "required" })
+                        @Html.ValidationMessageFor(m => m.searchPost.MatchString)
+                        @Html.HiddenFor(m => m.dataSetIndexView.id)
+                        @Html.HiddenFor(m => m.nodeUrl)
+
+                    </div>
+
+                    <div class="clearpad5"></div>
+                    <div class="sortpage">
+                        <span class="labl_sort"> Match Factor :</span>
+                    </div>
+                    <div class="search_box">
+                        @Html.TextBoxFor(m => m.searchPost.Likelihood, new { @type = "number", @min = 0, @class = "serch", maxlength = "100", required = "required" })
+                        @Html.ValidationMessageFor(m => m.searchPost.Likelihood)
+                    </div>
+                    <div class="searchpagefindbtn"><button type="submit" class="save_btn" style="width:85px;padding:0px;">Find</button></div>
+                </div>
+                <div class="search_results">
+                    @if (Model.dataSetIndexView != null)
+                    {
+                        <p> Index has @Model.dataSetIndexView.recordCount.ToString("#,##0") records to search <span class="found"></span> </p>
+                    }
+                    <p>Node URL: @Model.dataSetIndexView.nodeUrl</p>
+                </div>
+            </div>
+            <div style="padding-left:25px;">
+                @if (Model.IsPrev)
+                {
+                    <button type="submit" class="save_btn sav_selet" onclick="SubmitForm('Prev', '@ViewBag.Preview')">Previous</button>
+                }
+                @if (Model.IsNext)
+                {
+                    <button type="submit" class="save_btn sav_selet" onclick="SubmitForm('Next', '@ViewBag.Nextpage')">Next</button>
+                }
+            </div>
+
+
+            <div class="list_main">
+                @if (Model.searchResults != null)
+                {
+                    foreach (DataSense_UI.Models.DTO.MatchPairView match in Model.searchResults)
+                    {
+                        <div class="list_results">
+                            <div class="name_LR"> @match.MatchingRecord.IndexColumn</div>
+                            <div class="match"> @match.JaccardIndex.ToString("P", System.Globalization.CultureInfo.InvariantCulture) Match </div>
+                        </div>
+                    }
+
+                }
+                @if (Model.patternSearchResults != null)
+                {
+                    foreach (DataSense_UI.Models.DTO.LocationView match in Model.patternSearchResults)
+                    {
+                        <div class="list_results">
+                            <div class="name_LR"> @match.patternRecord.IndexColumn </div>
+                            <div class="match">  "Found in: " @match.location  </div>
+                        </div>
+                    }
+                }
+                <div class="list_results">
+                    <div class="form-group">
+                        <div class="form_h4 error">
+                            @if (Model != null)
+                            {
+                                if (Model.errormsg != null)
+                                {
+                                    @Model.errormsg
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="padding-left:10px;">
+                @if (Model.IsPrev)
+                {
+                    <button type="submit" class="save_btn sav_selet" style="margin-left:15px;" onclick="SubmitForm('Prev','@ViewBag.Preview')">Previous</button>
+                }
+                @if (Model.IsNext)
+                {
+                    <button type="submit" class="save_btn sav_selet" onclick="SubmitForm('Next','@ViewBag.Nextpage')">Next</button>
+                }
+            </div>
+        </div>
+    </div>
+}

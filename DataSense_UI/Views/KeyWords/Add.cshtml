@@ -1,0 +1,38 @@
+﻿@model DataSense_UI.Models.ViewModels.KeyWordsViewModel
+@{
+    ViewBag.Title = "Add Keyword";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Post", "KeyWords", FormMethod.Post, new { @class = "container-fluid h-100 main_app", role = "form" }))
+{
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/DataSet" title="Data Set"> Data Set </a> / </li>
+                    <li> <a href="/DataSetIndex/Index?id=@ViewBag.DatasetId" title="View Indexes"> View Indexes </a> / </li>
+                    <li> @Model.DataSetName / </li>
+                    <li> Keywords </li>
+                </ul>
+            </div>
+            <div class="twitter_data_hd">
+                <h2 class="heading_in"> @Model.DataSetName </h2>
+            </div>
+            <div class="edit_form">
+                <div class="form-group">
+                    <label class="name_lbl"> Keyword </label>
+                    @Html.TextBoxFor(m => m.dataSetKeywordPost.keyWord, new { @class = "form-control", minlength = "2", required = "required", autocapitalize = "none" })
+                    @Html.ValidationMessageFor(m => m.dataSetKeywordPost.keyWord)
+                    @Html.HiddenFor(m => m.dataSetKeywordPost.dataSetIndexId)
+                    <input type="hidden" value="@ViewBag.DatasetId" name="Datasetid" />
+                </div>
+                <div class="btns">
+                    <button type="submit" class="save_btn">Save</button>
+                    <button type="button" class="cancel_btn" onclick="location.href = '/KeyWords/Index?id=@Model.dataSetKeywordPost.dataSetIndexId';">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

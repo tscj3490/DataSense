@@ -1,0 +1,110 @@
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\DataSense_UI.dll.config
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\DataSense_UI.dll
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\DataSense_UI.pdb
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\Antlr3.Runtime.dll
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\Kendo.Mvc.dll
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\Microsoft.Web.Infrastructure.dll
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\Newtonsoft.Json.dll
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\System.Web.Helpers.dll
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\System.Web.Mvc.dll
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\System.Web.Optimization.dll
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\System.Web.Razor.dll
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\System.Web.WebPages.Deployment.dll
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\System.Web.WebPages.dll
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\System.Web.WebPages.Razor.dll
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\WebGrease.dll
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\Antlr3.Runtime.pdb
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\Newtonsoft.Json.xml
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\System.Web.Helpers.xml
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\System.Web.Mvc.xml
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\System.Web.Optimization.xml
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\System.Web.Razor.xml
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\System.Web.WebPages.xml
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\System.Web.WebPages.Deployment.xml
+E:\Task\Alex_API Doc\work\DataSense_UI\bin\System.Web.WebPages.Razor.xml
+E:\Task\Alex_API Doc\work\DataSense_UI\obj\Debug\DataSense_UI.csprojAssemblyReference.cache
+E:\Task\Alex_API Doc\work\DataSense_UI\obj\Debug\DataSense_UI.csproj.CoreCompileInputs.cache
+E:\Task\Alex_API Doc\work\DataSense_UI\obj\Debug\DataSense_UI.csproj.CopyComplete
+E:\Task\Alex_API Doc\work\DataSense_UI\obj\Debug\DataSense_UI.dll
+E:\Task\Alex_API Doc\work\DataSense_UI\obj\Debug\DataSense_UI.pdb
+E:\Task\Alex_API\work\DataSense_UI\bin\DataSense_UI.dll.config
+E:\Task\Alex_API\work\DataSense_UI\bin\DataSense_UI.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\DataSense_UI.pdb
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\csc.exe
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\csc.exe.config
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\csc.rsp
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\csi.exe
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\csi.exe.config
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\csi.rsp
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\Microsoft.CodeAnalysis.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\Microsoft.CSharp.Core.targets
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\Microsoft.VisualBasic.Core.targets
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\Microsoft.Win32.Primitives.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.AppContext.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Collections.Immutable.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Console.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Diagnostics.Process.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Diagnostics.StackTrace.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.IO.Compression.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.IO.FileSystem.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.IO.FileSystem.DriveInfo.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.IO.FileSystem.Primitives.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.IO.Pipes.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Reflection.Metadata.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Security.AccessControl.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Security.Claims.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Security.Cryptography.Encoding.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Security.Cryptography.Primitives.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Security.Principal.Windows.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Text.Encoding.CodePages.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Threading.Thread.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.ValueTuple.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Xml.ReaderWriter.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Xml.XmlDocument.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Xml.XPath.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\System.Xml.XPath.XDocument.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\vbc.exe
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\vbc.exe.config
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\vbc.rsp
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\VBCSCompiler.exe
+E:\Task\Alex_API\work\DataSense_UI\bin\roslyn\VBCSCompiler.exe.config
+E:\Task\Alex_API\work\DataSense_UI\bin\Antlr3.Runtime.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\Kendo.Mvc.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\Microsoft.Web.Infrastructure.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\Newtonsoft.Json.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\System.Web.Helpers.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\System.Web.Mvc.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\System.Web.Optimization.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\System.Web.Razor.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\System.Web.WebPages.Deployment.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\System.Web.WebPages.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\System.Web.WebPages.Razor.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\WebGrease.dll
+E:\Task\Alex_API\work\DataSense_UI\bin\Antlr3.Runtime.pdb
+E:\Task\Alex_API\work\DataSense_UI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+E:\Task\Alex_API\work\DataSense_UI\bin\Newtonsoft.Json.xml
+E:\Task\Alex_API\work\DataSense_UI\bin\System.Web.Helpers.xml
+E:\Task\Alex_API\work\DataSense_UI\bin\System.Web.Mvc.xml
+E:\Task\Alex_API\work\DataSense_UI\bin\System.Web.Optimization.xml
+E:\Task\Alex_API\work\DataSense_UI\bin\System.Web.Razor.xml
+E:\Task\Alex_API\work\DataSense_UI\bin\System.Web.WebPages.xml
+E:\Task\Alex_API\work\DataSense_UI\bin\System.Web.WebPages.Deployment.xml
+E:\Task\Alex_API\work\DataSense_UI\bin\System.Web.WebPages.Razor.xml
+E:\Task\Alex_API\work\DataSense_UI\obj\Debug\DataSense_UI.csprojAssemblyReference.cache
+E:\Task\Alex_API\work\DataSense_UI\obj\Debug\DataSense_UI.csproj.CoreCompileInputs.cache
+E:\Task\Alex_API\work\DataSense_UI\obj\Debug\DataSense_UI.csproj.CopyComplete
+E:\Task\Alex_API\work\DataSense_UI\obj\Debug\DataSense_UI.dll
+E:\Task\Alex_API\work\DataSense_UI\obj\Debug\DataSense_UI.pdb

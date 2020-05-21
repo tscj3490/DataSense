@@ -1,0 +1,52 @@
+﻿@model DataSense_UI.Models.ViewModels.UsersViewModel
+
+@using (Html.BeginForm("PostUser", "ManageUsers", FormMethod.Post, new { @class = "container-fluid h-100 main_app", role = "form" }))
+{
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/ManageUsers" title="Manage user">Manage user </a> / </li>
+                    <li>Edit user</li>
+                </ul>
+            </div>
+            <div class="twitter_data_hd">
+                <h2 class="heading_in"> John Smith </h2>
+            </div>
+            <div class="edit_form">
+                <div class="form-group">
+                    <label class="name_lbl">First Name </label>
+                    @Html.TextBoxFor(m => m.userAdd.firstName, new { @class = "form-control", maxlength = "50", required = "required" })
+                </div>
+                <div class="form-group">
+                    <label class="name_lbl"> Last Name </label>
+                    @Html.TextBoxFor(m => m.userAdd.lastName, new { @class = "form-control", maxlength = "50", required = "required" })
+
+                </div>
+                <div class="form-group">
+                    <label class="name_lbl"> E-mail ID </label><br />
+                    @Html.TextBoxFor(m => m.userAdd.emailAddress, new { @class = "form-control", maxlength = "50", required = "required", autocomplete = "off" })
+
+                </div>
+                <div class="checkbox_main">
+                    <label class="select_m">
+                        <span class="chkbox_txt"> Active </span>
+                        @Html.CheckBoxFor(m => m.userAdd.active, new { })
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="name_lbl"> Password </label><br />
+                    @Html.TextBoxFor(m => m.userAdd.passWord, new { @class = "form-control", maxlength = "50", required = "required" , autocomplete = "new-password", type= "password" })
+
+                </div>
+
+                <div class="btns">
+                    <button type="submit" class="save_btn">Save</button>
+                    <button type="button" class="cancel_btn" onclick="location.href = '/ManageUsers/Index';">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,47 @@
+﻿@model DataSense_UI.Models.ViewModels.ViewRunViewModel
+@{
+    ViewBag.Title = "Status Log";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid h-100 main_app">
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/DataSet" title="Data Sets">Data Sets</a> / </li>
+                    <li> <a href="/DataSet" title="@Model.DataSetName">@Model.DataSetName</a> / </li>
+                    <li> <a href="/DataSetIndex/Index?id=@Request.QueryString["dataSetIndexId"]" title="Businessname"> View Index </a> / </li>
+                    <li> <a href="/ViewRun/Index?id=@Request.QueryString["dataSetIndexId"]&dataSetId=@Request.QueryString["dataSetId"]" title="View Run"> View Run </a> /</li>
+                    <li> Status log </li>
+                </ul>
+            </div>
+            <div class="twitter_data_hd">
+                <h2 class="heading_in"> Status log </h2>
+            </div>
+            <div class="list_main">
+                <div class="common_list list_headimng">
+                    <div class="status_log"> Status </div>
+                    <div class="occured_on"> Occured on</div>
+                </div>
+                @foreach (var item in Model.DataSetIndexRunDetailView.status)
+        {
+            <div class="common_list">
+                <div class="status_log" style="color: #2399ff;"> @item.name </div>
+                <div class="occured_on"> @item.createdOn</div>
+            </div>
+}
+            </div>
+            <div style="padding-left:25px;display:table">
+                @if (Model.IsPrev)
+        {
+            <button type="button" class="save_btn sav_selet" onclick="location.href = '/ViewRun/statuslog?id=@ViewBag.id&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId&pageNo=@ViewBag.Preview';">Previous</button>
+}
+                @if (Model.IsNext)
+        {
+            <button type="button" class="save_btn sav_selet" onclick="location.href = '/ViewRun/statuslog?id=@ViewBag.id&dataSetIndexId=@ViewBag.dataSetIndexId&dataSetId=@ViewBag.dataSetId&pageNo=@ViewBag.Nextpage';">Next</button>
+}
+            </div>
+        </div>
+    </div>
+</div>

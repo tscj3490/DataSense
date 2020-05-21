@@ -1,0 +1,74 @@
+﻿@model DataSense_UI.Models.ViewModels.DataSetIndexViewModel
+
+<div class="container-fluid h-100 main_app">
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/DataSet" title="Data Sets">Data Sets</a> / </li>
+                    <li> <a href="/DataSet" title="@Model.DataSetName">@Model.DataSetName</a> / </li>
+                    <li> View Indexes </li>
+                </ul>
+            </div>
+            <div class="twitter_data_hd">
+                <h2 class="heading_in"> @Model.DataSetName Data Set Indexes</h2>
+                <div class="add_data">
+                    <a class="add_data_btn" href="@Url.Content("/DataSetIndex/Add?id="+Request.QueryString["id"])" style="text-decoration:none;">
+                        <span>+</span> Add Data Set Index
+                    </a>
+                </div>
+            </div>
+            <div class="index_list">
+                <div class="row index_list_headimng">
+                    <div class="col-2 index_col">Environment</div>
+                    <div class="col limit_rec">No. Of Servers</div>
+                    <div class="col sin_siz">No. Of Databases</div>
+                    <div class="col">Recent Status</div>
+                </div>
+                @foreach (DataSense_UI.Models.DTO.DataSetIndexView ds in Model.dataSetIndexViewList)
+                {
+                    <div class="row common_IL">
+                        <div class="col-2 index_col"><a href="#" title="Businessname">@ds.dataSetColumns</a></div>
+                        <div class="col limit_rec">@ds.noOfServers</div>
+                        <div class="col sin_siz">@ds.noOfDatabases</div>
+                        <div class="col procs_finished">@ds.status</div>
+                    </div>
+                    <div class="blue_bar">
+                        <ul class="ind_ul">
+                            @if (ds.procType == 'S')
+                            {
+                                <li> <a href="#" class="@(ds.active == true ? "active_btn" : "inactive_btn")"> <span class="dot"></span> @(ds.active == true ? "Active" : "InActive") </a></li>
+                                <li> <a href="/Search/Index?id=@ds.id" class="test_serch" title="Test Search">Test Search</a></li>
+                                <li> <a href="/Schedule?id=@ds.id&dataSetId=@ds.dataSetId" class="schedule" title="Schedule">Schedule</a></li>
+                                <li> <a href="/DataSetIndex/edit?id=@ds.id&dataSetId=@ds.dataSetId" class="edit_database" title="Edit Dataset Index">Edit Dataset Index</a></li>
+                                <li> <a href="/KeyWords/Index?id=@ds.id&dataSetId=@ds.dataSetId" class="keywords" title="keywords">keywords</a></li>
+                                <li> <a href="/ViewRun/Index?id=@ds.id&dataSetId=@ds.dataSetId" class="view_run" title="View Runs">View Runs</a></li>
+                            }
+
+                            @if (ds.procType == 'B')
+                            {
+                                <li> <a href="#" class="@(ds.active == true ? "active_btn" : "inactive_btn")"> <span class="dot"></span> @(ds.active == true ? "Active" : "InActive") </a></li>
+                                <li> <a href="/Search/Index?id=@ds.id" class="test_serch" title="Download File">Download File</a></li>
+                                <li> <a href="/Schedule?id=@ds.id&dataSetId=@ds.dataSetId" class="schedule" title="Schedule">Schedule</a></li>
+                                <li> <a href="/DataSetIndex/edit?id=@ds.id&dataSetId=@ds.dataSetId" class="edit_database" title="Edit Dataset Index">Edit Dataset Index</a></li>
+                                <li> <a href="/KeyWords/Index?id=@ds.id&dataSetId=@ds.dataSetId" class="keywords" title="keywords">keywords</a></li>
+                                <li> <a href="/ViewRun/Index?id=@ds.id&dataSetId=@ds.dataSetId" class="view_run" title="View Runs">View Runs</a></li>
+                            }
+
+                            @if (ds.procType == 'P')
+                            {
+                                <li> <a href="#" class="@(ds.active == true ? "active_btn" : "inactive_btn")"> <span class="dot"></span> @(ds.active == true ? "Active" : "InActive") </a></li>
+                                <li> <a href="/Schedule?id=@ds.id&dataSetId=@ds.dataSetId" class="schedule" title="Schedule">Schedule</a></li>
+                                <li> <a href="/ViewMachines/Index?dataSetIndexId=@ds.id&dataSetId=@ds.dataSetId" class="keywords" title="View Machines">View Machines</a></li>
+                                <li> <a href="/DataSetIndex/edit?id=@ds.id&dataSetId=@ds.dataSetId" class="edit_database" title="Edit Dataset Index">Edit Dataset Index</a></li>
+                                <li> <a href="/ViewRun/Index?id=@ds.id&dataSetId=@ds.dataSetId" class="view_run" title="View Runs">View Runs</a></li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>

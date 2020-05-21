@@ -1,0 +1,46 @@
+﻿@model DataSense_UI.Models.ViewModels.ViewRunViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid h-100 main_app">
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/DataSet" title="Data Sets">Data Sets</a> / </li>
+                    <li> <a href="/DataSet" title="@Model.DataSetName">@Model.DataSetName</a> / </li>
+                    <li> <a href="/DataSetIndex/Index?id=@Request.QueryString["id"]" title="Businessname"> Businessname </a> / </li>
+                    <li> View Run </li>
+                </ul>
+            </div>
+            <div class="twitter_data_hd">
+                <h2 class="heading_in"> Runs </h2>
+            </div>
+            <div class="list_main">
+                <div class="common_list list_headimng">
+                    <div class="data_name"> Run On </div>
+                    <div class="status" style="font-weight:600;">Status </div>
+                    <div class="queuedBy" style="font-weight:600;">Queued By </div>
+                    <div class="file_generated" style="font-weight:600;"> File Generated</div>
+                    <div class="actions_log" style="font-weight:600;">Actions </div>
+                </div>
+                @foreach (var item in Model.listdataSetIndexRunView)
+                {
+                    <div class="common_list">
+                        <div class="data_name">@item.createdOn </div>
+                        <div class="status">Filtering Similars</div>
+                        <div class="queuedBy">System</div>
+                        <div class="file_generated" style="width:14%"> N/A </div>
+                        <div class="actions_log" style="width:38%">
+                            <a href="/ViewRun/statuslog?id=@item.id&dataSetId=@Request.QueryString["dataSetId"]&dataSetIndexId=@Request.QueryString["id"]" title="Status log" class="status_log btn_log">Status log </a>
+                            <a href="/ViewRun/DetailedLog?id=@item.id&dataSetId=@Request.QueryString["dataSetId"]&dataSetIndexId=@Request.QueryString["id"]" title="Detailed log" class="detailed_log btn_log">Detailed log </a>
+                            <a href="/ViewRun/ForceComplete?id=@item.id&dataSetId=@Request.QueryString["dataSetId"]&dataSetIndexId=@Request.QueryString["id"]" title="Force Complete" class="detailed_log btn_log">Force Complete</a>
+                        </div>
+                    </div>
+                }                
+            </div>
+        </div>
+    </div>
+</div>

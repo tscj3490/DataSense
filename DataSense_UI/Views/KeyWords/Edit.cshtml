@@ -1,0 +1,72 @@
+﻿@model DataSense_UI.Models.ViewModels.KeyWordsViewModel
+
+@using (Html.BeginForm("Patch", "KeyWords", FormMethod.Post, new { @class = "container-fluid h-100 main_app", role = "form" }))
+{
+
+    <div class="row">
+        @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+        <div class="col-lg-10 rt_main">
+            <div class="heading_top">
+                <ul class="pagination_ul">
+                    <li> <a href="/DataSet" title="Data Set"> Data Set </a> / </li>
+                    <li> <a href="/DataSetIndex/Index?id=@ViewBag.DatasetId" title="View Indexes"> View Indexes </a> / </li>
+                    <li> @Model.DataSetName / </li>
+                    <li> Keywords </li>
+                </ul>
+            </div>
+            <div class="twitter_data_hd">
+                <h2 class="heading_in"> @Model.DataSetName </h2>
+            </div>
+            <div class="edit_form">
+                <div class="form-group">
+                    <label class="name_lbl"> Keyword </label>
+                    @Html.TextBoxFor(m => m.dataSetKeyWordPatch.keyWord, new { @class = "form-control", maxlength = "50", required = "required", autocapitalize = "none" })
+                    @Html.ValidationMessageFor(m => m.dataSetKeyWordPatch.keyWord)
+                    @Html.HiddenFor(m => m.dataSetKeyWord.id)
+                    @Html.HiddenFor(m => m.dataSetKeyWordPatch.dataSetIndexId)
+                    <input type="hidden" value="@ViewBag.DatasetId" name="Datasetid" />
+                </div>
+                <div class="form-group">
+                    <label class="name_lbl"> Created on</label>
+                    <br />
+                    @Model.dataSetKeyWord.createdOn
+
+                    <div class="abslut_icon">
+                        <div class="username_rt date_abst">  </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="name_lbl"> Created by </label>
+                    <br />
+                    @Model.dataSetKeyWord.createdBy
+
+                    <div class="abslut_icon">
+                        <div class="username_rt date_abst">  </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="name_lbl"> Last Modified on </label>
+                    <br />
+                    @Model.dataSetKeyWord.modifiedOn
+
+                    <div class="abslut_icon">
+                        <div class="username_rt date_abst">  </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="name_lbl"> Last Modified by </label>
+                    <br />
+                    @Model.dataSetKeyWord.modifiedBy
+
+                    <div class="abslut_icon">
+                        <div class="username_rt">  </div>
+                    </div>
+                </div>
+                <div class="btns">
+                    <button type="submit" class="save_btn">Save</button>
+                    <button type="button" class="cancel_btn" onclick="location.href = '/KeyWords/Index?id=@Request.QueryString["datasetindexid"]';">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

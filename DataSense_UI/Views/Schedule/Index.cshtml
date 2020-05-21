@@ -1,0 +1,888 @@
+﻿@model DataSense_UI.Models.ViewModels.ScheduleViewModel
+
+<script>
+    function ddlDailyhourToRun() {
+        var hourlyOccurrence = $("#hourToRun").val();
+        var hourToRunAMPM = $("#hourToRunAMPM").val();
+
+        if (hourToRunAMPM == 'AM') {
+            document.getElementById("indexDailyView_hourToRun").value = hourlyOccurrence;
+        } else {
+            document.getElementById("indexDailyView_hourToRun").value = parseInt(hourlyOccurrence) + 12;
+        }
+    }
+    function ddlWeeklyhourToRun() {
+        var indexWeeklyView_hourToRun = $("#ddlhourToRun").val();
+        var WeeklyhourToRunAMPM = $("#WeeklyhourToRunAMPM").val();
+
+        if (WeeklyhourToRunAMPM == 'AM') {
+            document.getElementById("indexWeeklyView_hourToRun").value = indexWeeklyView_hourToRun;
+        } else {
+            document.getElementById("indexWeeklyView_hourToRun").value = parseInt(indexWeeklyView_hourToRun) + 12;
+        }
+    }
+    function getCheckedBoxes() {
+        var checkboxes = document.getElementsByName("daysToRun");
+        var checkboxesChecked = [];
+        // loop over them all
+        var daysToRunvalue = ""
+        for (var i = 0; i < checkboxes.length; i++) {
+            // And stick the checked ones onto an array...
+            if (checkboxes[i].checked) {
+                if (daysToRunvalue == "") {
+                    daysToRunvalue = (checkboxes[i].value);
+                }
+                else {
+                    daysToRunvalue = daysToRunvalue + "," + (checkboxes[i].value);
+                }
+
+            }
+        }
+        document.getElementById("indexWeeklyView_daysToRun").value = daysToRunvalue;
+    }
+    function SelectAllMonth() {
+        var select_all = document.getElementById("select_all"); //select all checkbox
+        var checkboxes = document.getElementsByClassName("checkbox"); //checkbox items
+
+        for (i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = select_all.checked;
+            MonthChanged(checkboxes[i], checkboxes[i].value);
+        }
+        //SelectDayByMonth();
+    }
+    //$(document).ready(function () {
+    //    //$('input:checkbox.checkbox').change(function () {
+    //    //    SelectDayByMonth();
+    //    //});
+    //});
+
+    function GetFirstDayByMonthName(MonthName) {
+        var DayCount = 0;
+
+        switch (MonthName) {
+            case "JanDay":
+                DayCount=0;
+                break;
+            case "FebDay":
+                DayCount = 31;
+                break;
+            case "MarDay":
+                DayCount = 60;
+                break;
+            case "AprDay":
+                DayCount = 91;
+                break;
+            case "MayDay":
+                DayCount = 121;
+                break;
+            case "JunDay":
+                DayCount = 152;
+                break;
+            case "JulDay":
+                DayCount = 182;
+                break;
+            case "AugDay":
+                DayCount = 213;
+                break;
+            case "SeptDay":
+                DayCount = 244;
+                break;
+            case "OctDay":
+                DayCount = 274;
+                break;
+            case "NovDay":
+                DayCount = 305;
+                break;
+            case "DecDay":
+                DayCount = 335;
+                break;
+        }
+        return DayCount;
+    }
+
+    function MonthChanged(chkObj, ID) {
+        if (chkObj.checked == true) {
+            document.getElementById("hrf_" + ID).style.display = "inline";
+            document.getElementById("indexMonthlyView_" + GetFirstDayByMonthName(ID) + "__monthDay").checked = true;
+        } else {
+            document.getElementById("indexMonthlyView_" + GetFirstDayByMonthName(ID) + "__monthDay").checked = false;
+            document.getElementById("hrf_" + ID).style.display = "none";
+            document.getElementById(ID).style.display = "none";
+        }
+    }
+    function ExpandDay(ID) {
+        document.getElementById(ID).style.display = "Block";
+        document.getElementById("cl-" + ID).className = "collapse show";
+
+        document.getElementById("indexMonthlyView_" + GetFirstDayByMonthName(ID) + "__monthDay").checked = true;
+    }
+    function hideSavebtn(btnID) {
+        document.getElementById("btnsavedaily").style.display = "none";
+        document.getElementById("btnsavehourly").style.display = "none";
+        document.getElementById("btnsaveweekly").style.display = "none";
+        document.getElementById("btnsavemonthly").style.display = "none";
+        document.getElementById("btnsave" + btnID).style.display = "block";
+    }
+</script>
+
+@using (Html.BeginForm("Post", "Schedule", FormMethod.Post, new { @class = "container-fluid h-100 main_app", role = "form" }))
+{
+    <div class="container-fluid h-100 main_app">
+        <div class="row">
+            @Html.Partial("~/Views/Shared/LeftMenupanel.cshtml")
+            <div class="col-lg-10 rt_main">
+                <div class="heading_top">
+                    <ul class="pagination_ul">
+                        <li> <a href="/DataSet" title="Data Set"> Data Set </a> / </li>
+                        <li> <a href="/DataSetIndex/Index?id=@ViewBag.dataSetId" title="View Indexes"> View Indexes </a> / </li>
+                        <li> @Model.DataSetName / </li>
+                        <li> Schedule </li>
+                    </ul>
+                </div>
+                <div class="twitter_data_hd schedule">
+                    <h2 class="heading_in"> Schedule </h2>
+                    <div class="search_results">
+                        <p> An index can be scheduled to run Daily, Hourly, or Weekly. </p>
+                    </div>
+                </div>
+                <div class="row schedule_time">
+                    <div class="col-md-6 daily">
+                        <div class="radio">
+                            <label class="radio_fancy">
+                                <input type="radio" onclick="hideSavebtn('daily');" name="radio" @(Model.indexDailyView.id != 0 ? "checked=\"checked\"" : "") value="Daily">
+                                @Html.HiddenFor(m => m.indexDailyView.dataSetIndexId)
+                                @Html.HiddenFor(m => m.indexDailyView.id)
+                                <input type="hidden" name="dataSetId" value="@ViewBag.dataSetId" />
+                                <span class="checkmark"></span>
+                                <h3 class="radio_heading"> Daily </h3>
+                            </label>
+                        </div>
+                        <div class="box_common">
+                            <div class="select_Main">
+                                @*@Html.TextBoxFor(model => model.indexDailyView.hourToRun, new { type = "time", @class = "date_input", required = "required" })*@
+                                @{
+                                    int ddlselectvalue = Model.indexDailyView.hourToRun;
+                                    if (Model.indexDailyView.hourToRun > 12)
+                                    {
+                                        ddlselectvalue = Model.indexDailyView.hourToRun - 12;
+                                    }
+
+                                    var listItems4 = new List<SelectListItem>();
+                                    listItems4.Add(new SelectListItem { Text = "1", Value = "1", Selected = (ddlselectvalue==1 ? true:false) });
+                                    listItems4.Add(new SelectListItem { Text = "2", Value = "2", Selected = (ddlselectvalue == 2 ? true : false) });
+                                    listItems4.Add(new SelectListItem { Text = "3", Value = "3", Selected = (ddlselectvalue == 3 ? true : false) });
+                                    listItems4.Add(new SelectListItem { Text = "4", Value = "4", Selected = (ddlselectvalue == 4 ? true : false) });
+                                    listItems4.Add(new SelectListItem { Text = "5", Value = "5", Selected = (ddlselectvalue == 5 ? true : false) });
+                                    listItems4.Add(new SelectListItem { Text = "6", Value = "6", Selected = (ddlselectvalue == 6 ? true : false) });
+                                    listItems4.Add(new SelectListItem { Text = "7", Value = "7", Selected = (ddlselectvalue == 7 ? true : false) });
+                                    listItems4.Add(new SelectListItem { Text = "8", Value = "8", Selected = (ddlselectvalue == 8 ? true : false) });
+                                    listItems4.Add(new SelectListItem { Text = "9", Value = "9", Selected = (ddlselectvalue == 9 ? true : false) });
+                                    listItems4.Add(new SelectListItem { Text = "10", Value = "10", Selected = (ddlselectvalue == 10 ? true : false) });
+                                    listItems4.Add(new SelectListItem { Text = "11", Value = "11", Selected = (ddlselectvalue == 11 ? true : false) });
+                                    listItems4.Add(new SelectListItem { Text = "12", Value = "12", Selected = (ddlselectvalue == 12 ? true : false) });
+                                }
+                                @if (Model.indexDailyView.hourToRun > 12)
+                                {
+                                @Html.DropDownList("hourToRun", listItems4, new { @class = "select_Menu", style = "width:50px", required = "required", onchange = @"ddlDailyhourToRun();" })
+                                    var listItems5 = new List<SelectListItem>();
+                                    listItems5.Add(new SelectListItem { Text = "AM", Value = "AM" });
+                                    listItems5.Add(new SelectListItem { Text = "PM", Value = "PM", Selected = true });
+
+                                @Html.DropDownList("hourToRunAMPM", listItems5, new { @class = "select_Menu", style = "width:50px", onchange = @"ddlDailyhourToRun();" })
+
+                                }
+                                else
+                                {
+                                @Html.DropDownList("hourToRun", listItems4, new { @class = "select_Menu", style = "width:50px", required = "required", onchange = @"ddlDailyhourToRun();" })
+
+                                    var listItems5 = new List<SelectListItem>();
+                                    listItems5.Add(new SelectListItem { Text = "AM", Value = "AM", Selected = true });
+                                    listItems5.Add(new SelectListItem { Text = "PM", Value = "PM" });
+
+                                @Html.DropDownList("hourToRunAMPM", listItems5, new { @class = "select_Menu", style = "width:50px", onchange = @"ddlDailyhourToRun();" })
+                                }
+                                @Html.HiddenFor(m=>m.indexDailyView.hourToRun)
+                                @*<input type="time" value="@Model.indexDailyView.hourToRun" class="date_input" required>*@
+                                choose your time
+                            </div>
+                            <div class="btns">
+                                <button type="submit" id="btnsavedaily" class="save_btn" style="display:@(Model.indexDailyView.id != 0 ? "block" : "none");">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 hourly">
+                        <div class="radio">
+                            <label class="radio_fancy">
+                                <input type="radio" onclick="hideSavebtn('hourly');" name="radio" @(Model.indexHourlyView.id != 0 ? "checked=\"checked\"" : "") value="Hourly">
+                                @Html.HiddenFor(m => m.indexHourlyView.dataSetIndexId)
+                                @Html.HiddenFor(m => m.indexHourlyView.id)
+                                <span class="checkmark"></span>
+                                <h3 class="radio_heading"> Hourly </h3>
+                            </label>
+                        </div>
+                        <div class="box_common">
+                            <p class="choose_hours"> Choose your hours</p>
+                            <div class="hourly_select">
+                                <div class="txt_aftr"> After every </div>
+                                <div class="select_Main">
+                                    @{
+                                        var listItems = new List<SelectListItem>();
+                                            listItems.Add(new SelectListItem { Text = "1 hour", Value = "1" });
+                                        listItems.Add(new SelectListItem { Text = "2 hour", Value = "2" });
+                                        listItems.Add(new SelectListItem { Text = "3 hour", Value = "3" });
+                                        listItems.Add(new SelectListItem { Text = "4 hour", Value = "4" });
+                                        listItems.Add(new SelectListItem { Text = "5 hour", Value = "5" });
+                                        listItems.Add(new SelectListItem { Text = "6 hour", Value = "6" });
+                                        listItems.Add(new SelectListItem { Text = "7 hour", Value = "7" });
+                                        listItems.Add(new SelectListItem { Text = "8 hour", Value = "8" });
+                                        listItems.Add(new SelectListItem { Text = "9 hour", Value = "9" });
+                                        listItems.Add(new SelectListItem { Text = "10 hour", Value = "10" });
+                                        listItems.Add(new SelectListItem { Text = "11 hour", Value = "11" });
+                                        listItems.Add(new SelectListItem { Text = "12 hour", Value = "12" });
+                                        listItems.Add(new SelectListItem { Text = "13 hour", Value = "13" });
+                                        listItems.Add(new SelectListItem { Text = "14 hour", Value = "14" });
+                                        listItems.Add(new SelectListItem { Text = "15 hour", Value = "15" });
+                                        listItems.Add(new SelectListItem { Text = "16 hour", Value = "16" });
+                                        listItems.Add(new SelectListItem { Text = "17 hour", Value = "17" });
+                                        listItems.Add(new SelectListItem { Text = "18 hour", Value = "18" });
+                                        listItems.Add(new SelectListItem { Text = "19 hour", Value = "19" });
+                                        listItems.Add(new SelectListItem { Text = "20 hour", Value = "20" });
+                                        listItems.Add(new SelectListItem { Text = "21 hour", Value = "21" });
+                                        listItems.Add(new SelectListItem { Text = "22 hour", Value = "22" });
+                                        listItems.Add(new SelectListItem { Text = "23 hour", Value = "23" });
+                                    }
+                                    @Html.DropDownListFor(m => m.indexHourlyView.hourlyOccurrence, listItems, new { @class = "select_Menu", style = "height:50px", required = "required" })
+                                </div>
+                            </div>
+                            <div class="btns">
+                                <button type="submit" id="btnsavehourly" class="save_btn" style="display:@(Model.indexHourlyView.id != 0 ? "block" : "none");">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 weekly">
+                        <div class="radio">
+                            <label class="radio_fancy">
+                                <input type="radio" onclick="hideSavebtn('weekly');" name="radio" @(Model.indexWeeklyView.id != 0 ? "checked=\"checked\"" : "") value="weekly">
+                                @Html.HiddenFor(m => m.indexWeeklyView.dataSetIndexId)
+                                @Html.HiddenFor(m => m.indexWeeklyView.id)
+                                <span class="checkmark"></span>
+                                <h3 class="radio_heading"> Weekly </h3>
+                            </label>
+                        </div>
+                        <div class="box_common">
+                            <p class="choose_hours">Choose a day to run</p>
+                            <div class="chk_box_hr">
+                                <div class="form-check">
+                                    <div class="checkbox_main">
+                                        <label class="select_m">
+                                            <span class="chkbox_txt"> Mon </span>
+                                            @if (Model.indexWeeklyView.daysToRun != null)
+                                    {
+                                            <input type="checkbox" onclick="javascript: getCheckedBoxes();" name="daysToRun" value="1" @(Model.indexWeeklyView.daysToRun.Contains("1") ? "checked=\"checked\"" : "")>
+                                            }
+                                            else
+                                            {
+                                            <input type="checkbox" name="daysToRun" value="1" onclick="javascript: getCheckedBoxes();">
+                                            }
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div class="checkbox_main">
+                                        <label class="select_m">
+                                            <span class="chkbox_txt"> Tue </span>
+                                            @if (Model.indexWeeklyView.daysToRun != null)
+                                    {
+                                            <input type="checkbox" name="daysToRun" onclick="javascript: getCheckedBoxes();" value="2" @(Model.indexWeeklyView.daysToRun.Contains("2") ? "checked=\"checked\"" : "")>
+                                            }
+                                            else
+                                            {
+                                            <input type="checkbox" name="daysToRun" onclick="javascript: getCheckedBoxes();" value="2">
+                                            }
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div class="checkbox_main">
+                                        <label class="select_m">
+                                            <span class="chkbox_txt"> Wed </span>
+                                            @if (Model.indexWeeklyView.daysToRun != null)
+                                    {
+                                            <input type="checkbox" name="daysToRun" onclick="javascript: getCheckedBoxes();" value="3" @(Model.indexWeeklyView.daysToRun.Contains("3") ? "checked=\"checked\"" : "")>
+                                            }
+                                            else
+                                            {
+                                            <input type="checkbox" name="daysToRun" onclick="javascript: getCheckedBoxes();" value="3">
+                                            }
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div class="checkbox_main">
+                                        <label class="select_m">
+                                            <span class="chkbox_txt"> Thu </span>
+                                            @if (Model.indexWeeklyView.daysToRun != null)
+                                    {
+                                            <input type="checkbox" name="daysToRun" onclick="javascript: getCheckedBoxes();" value="4" @(Model.indexWeeklyView.daysToRun.Contains("4") ? "checked=\"checked\"" : "")>
+                                            }
+                                            else
+                                            {
+                                            <input type="checkbox" name="daysToRun" onclick="javascript: getCheckedBoxes();" value="4">
+                                            }
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div class="checkbox_main">
+                                        <label class="select_m">
+                                            <span class="chkbox_txt"> Fri </span>
+                                            @if (Model.indexWeeklyView.daysToRun != null)
+                                    {
+                                            <input type="checkbox" name="daysToRun" onclick="javascript: getCheckedBoxes();" value="5" @(Model.indexWeeklyView.daysToRun.Contains("5") ? "checked=\"checked\"" : "")>
+                                            }
+                                            else
+                                            {
+                                            <input type="checkbox" name="daysToRun" onclick="javascript: getCheckedBoxes();" value="5">
+                                            }
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div class="checkbox_main">
+                                        <label class="select_m">
+                                            <span class="chkbox_txt"> Sat </span>
+                                            @if (Model.indexWeeklyView.daysToRun != null)
+                                    {
+                                            <input type="checkbox" name="daysToRun" onclick="javascript: getCheckedBoxes();" value="6" @(Model.indexWeeklyView.daysToRun.Contains("6") ? "checked=\"checked\"" : "")>
+                                            }
+                                            else
+                                            {
+                                            <input type="checkbox" name="daysToRun" onclick="javascript: getCheckedBoxes();" value="6" @(Model.indexWeeklyView.daysToRun == "saturday" ? "checked=\"checked\"" : "")>
+                                            }
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <div class="checkbox_main">
+                                        <label class="select_m">
+                                            <span class="chkbox_txt"> Sun </span>
+                                            @if (Model.indexWeeklyView.daysToRun != null)
+                                    {
+
+                                            <input type="checkbox" name="daysToRun" onclick="javascript: getCheckedBoxes();" value="0" @(Model.indexWeeklyView.daysToRun.Contains("0") ? "checked=\"checked\"" : "")>
+                                            }
+                                            else
+                                            {
+                                            <input type="checkbox" name="daysToRun" onclick="javascript: getCheckedBoxes();" value="0">
+                                            }
+                                            <span class="checkmark"></span>
+                                            @Html.HiddenFor(m => m.indexWeeklyView.daysToRun)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="select_Main">
+
+                                @*@Html.TextBoxFor(model => model.indexWeeklyView.hourToRun, new { type = "time", @class = "date_input", required = "required" })*@
+                                @{
+                                    int ddlselectvalueW = Model.indexWeeklyView.hourToRun;
+                                    if (ddlselectvalueW > 12)
+                                    {
+                                        ddlselectvalueW = ddlselectvalueW - 12;
+                                    }
+
+                                    var listItems2 = new List<SelectListItem>();
+                                    listItems2.Add(new SelectListItem { Text = "1", Value = "1", Selected = (ddlselectvalueW == 1 ? true : false) });
+                                    listItems2.Add(new SelectListItem { Text = "2", Value = "2", Selected = (ddlselectvalueW == 2 ? true : false) });
+                                    listItems2.Add(new SelectListItem { Text = "3", Value = "3", Selected = (ddlselectvalueW == 3 ? true : false) });
+                                    listItems2.Add(new SelectListItem { Text = "4", Value = "4", Selected = (ddlselectvalueW == 4 ? true : false) });
+                                    listItems2.Add(new SelectListItem { Text = "5", Value = "5", Selected = (ddlselectvalueW == 5 ? true : false) });
+                                    listItems2.Add(new SelectListItem { Text = "6", Value = "6", Selected = (ddlselectvalueW == 6 ? true : false) });
+                                    listItems2.Add(new SelectListItem { Text = "7", Value = "7", Selected = (ddlselectvalueW == 7 ? true : false) });
+                                    listItems2.Add(new SelectListItem { Text = "8", Value = "8", Selected = (ddlselectvalueW == 8 ? true : false) });
+                                    listItems2.Add(new SelectListItem { Text = "9", Value = "9", Selected = (ddlselectvalueW == 9 ? true : false) });
+                                    listItems2.Add(new SelectListItem { Text = "10", Value = "10", Selected = (ddlselectvalueW == 10 ? true : false) });
+                                    listItems2.Add(new SelectListItem { Text = "11", Value = "11", Selected = (ddlselectvalueW == 11 ? true : false) });
+                                    listItems2.Add(new SelectListItem { Text = "12", Value = "12", Selected = (ddlselectvalueW == 12 ? true : false) });
+                                }
+                                @if (Model.indexWeeklyView.hourToRun > 12)
+                                {
+                                @Html.DropDownList("ddlhourToRun", listItems2, new { @class = "select_Menu", style = "width:50px",  required = "required", onchange = @"ddlWeeklyhourToRun();" })
+
+                                    var listItems3 = new List<SelectListItem>();
+                                    listItems3.Add(new SelectListItem { Text = "AM", Value = "AM" });
+                                    listItems3.Add(new SelectListItem { Text = "PM", Value = "PM", Selected = true });
+
+                                @Html.DropDownList("WeeklyhourToRunAMPM", listItems3, new { @class = "select_Menu", style = "width:50px", onchange = @"ddlWeeklyhourToRun();" })
+                                }
+                                else
+                                {
+                                @Html.DropDownList("ddlhourToRun", listItems2, new { @class = "select_Menu", style = "width:50px", required = "required", onchange = @"ddlWeeklyhourToRun();" })
+
+                                    var listItems3 = new List<SelectListItem>();
+                                    listItems3.Add(new SelectListItem { Text = "AM", Value = "AM" , Selected = true });
+                                    listItems3.Add(new SelectListItem { Text = "PM", Value = "PM" });
+
+                                @Html.DropDownList("WeeklyhourToRunAMPM", listItems3, new { @class = "select_Menu", style = "width:50px", onchange = @"ddlWeeklyhourToRun();" })
+                                }
+                                @Html.HiddenFor(m=>m.indexWeeklyView.hourToRun)
+                                choose your time
+                                @*<input type="time" value="@Model.indexWeeklyView.hourToRun" class="date_input" required>*@
+                            </div>
+                            <div class="btns">
+                                <button type="submit" class="save_btn" id="btnsaveweekly" style="display:@(Model.indexWeeklyView.id != 0 ? "block" : "none");">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 monthly">
+                        <div class="radio">
+                            <label class="radio_fancy">
+                                @if (Model.indexMonthlyView !=null && Model.indexMonthlyView.Count > 0)
+                                {
+                                    <input type="radio" onclick="hideSavebtn('monthly');" name="radio" @(Model.indexMonthlyView.Where(n=>n.id != 0).ToList().Count > 0 ? "checked=\"checked\"" : "") value="Monthly">
+                                    @*@Html.HiddenFor(m => m.indexMonthlyView[0].dataSetIndexId)*@
+                                    @Html.HiddenFor(m => m.indexMonthlyView[0].id)
+                                }
+                                else
+                                {
+                                    <input type="radio" onclick="hideSavebtn('monthly');" name="radio" value="Monthly">
+                                    
+                                    <input type="hidden" name="indexMonthlyView[0].id" id="indexMonthlyView_0__id" value="0" />
+                                }
+                                <span class="checkmark"></span>
+                                <h3 class="radio_heading"> Monthly </h3>
+                            </label>
+                        </div>
+                        <div class="box_common">
+                            <div class="collapse-months">
+                                <a href="#cl-months" class="btn btn-select" data-toggle="collapse">Select months </a>
+                                <div id="cl-months" class="@(Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Year == 1900 && (n.monthDay.Month == 1 ||n.monthDay.Month == 2 ||n.monthDay.Month == 3 || n.monthDay.Month == 4 || n.monthDay.Month == 5 || n.monthDay.Month == 6 || n.monthDay.Month == 7 || n.monthDay.Month == 8 || n.monthDay.Month == 9 || n.monthDay.Month == 10 || n.monthDay.Month == 11 || n.monthDay.Month == 12)).Count() > 0 ? "collapse show":"collapse")">
+                                    <div class="form-check">
+                                        <div class="checkbox_main">
+                                            <label class="select_m">
+                                                <span class="chkbox_txt"> Select All Months </span>
+                                                <input type="checkbox" onchange="SelectAllMonth();" id="select_all">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="chk_box_hr">
+                                        <div class="form-check" style="width:140px;">
+                                            <div class="checkbox_main">
+                                                <label class="select_m">
+                                                    @if (Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Month == 1).Count() > 0)
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Jan
+                                                            <a id="hrf_JanDay" href="javascript:ExpandDay('JanDay');" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="JanDay" onchange="MonthChanged(this,'JanDay')" checked="checked">
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Jan
+                                                            <a id="hrf_JanDay" style="display:none;" href="javascript:ExpandDay('JanDay');" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="JanDay" onchange="MonthChanged(this,'JanDay')">
+                                                    }
+                                                    <span class="checkmark"></span>
+                                                </label>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-check" style="width:140px;">
+                                            <div class="checkbox_main">
+                                                <label class="select_m">
+                                                    @if (Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Month == 2).Count() > 0)
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Feb <a href="javascript:ExpandDay('FebDay');" id="hrf_FebDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="FebDay" onchange="MonthChanged(this, 'FebDay')" checked="checked">
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Feb <a style="display:none;" href="javascript:ExpandDay('FebDay');" id="hrf_FebDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="FebDay" onchange="MonthChanged(this, 'FebDay')">
+                                                    }
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-check" style="width:140px;">
+                                            <div class="checkbox_main">
+                                                <label class="select_m">
+                                                    @if (Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Month == 3).Count() > 0)
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Mar <a href="javascript:ExpandDay('MarDay');" id="hrf_MarDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="MarDay" onchange="MonthChanged(this, 'MarDay')" checked="checked">
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Mar <a style="display:none;" href="javascript:ExpandDay('MarDay');" id="hrf_MarDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="MarDay" onchange="MonthChanged(this, 'MarDay')">
+                                                    }
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-check" style="width:140px;">
+                                            <div class="checkbox_main">
+                                                <label class="select_m">
+                                                    @if (Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Month == 4).Count() > 0)
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Apr
+                                                            <a href="javascript:ExpandDay('AprDay');" id="hrf_AprDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="AprDay" onchange="MonthChanged(this, 'AprDay')" checked="checked">
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Apr
+                                                            <a style="display:none;" href="javascript:ExpandDay('AprDay');" id="hrf_AprDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="AprDay" onchange="MonthChanged(this, 'AprDay')">
+                                                    }
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-check" style="width:140px;">
+                                            <div class="checkbox_main">
+                                                <label class="select_m">
+                                                    @if (Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Month == 5).Count() > 0)
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            May <a href="javascript:ExpandDay('MayDay');" id="hrf_MayDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="MayDay" onchange="MonthChanged(this, 'MayDay')" checked="checked">
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            May <a style="display:none;" href="javascript:ExpandDay('MayDay');" id="hrf_MayDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="MayDay" onchange="MonthChanged(this, 'MayDay')">
+                                                    }
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-check" style="width:140px;">
+                                            <div class="checkbox_main">
+                                                <label class="select_m">
+                                                    @if (Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Month == 6).Count() > 0)
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Jun <a href="javascript:ExpandDay('JunDay');" id="hrf_JunDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="JunDay" onchange="MonthChanged(this, 'JunDay')" checked="checked">
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Jun <a style="display:none;" href="javascript:ExpandDay('JunDay');" id="hrf_JunDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="JunDay" onchange="MonthChanged(this, 'JunDay')">
+                                                    }
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-check" style="width:140px;">
+                                            <div class="checkbox_main">
+                                                <label class="select_m">
+                                                    @if (Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Month == 7).Count() > 0)
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Jul <a href="javascript:ExpandDay('JulDay');" id="hrf_JulDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="JulDay" onchange="MonthChanged(this, 'JulDay')" checked="checked">
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Jul <a style="display:none;" href="javascript:ExpandDay('JulDay');" id="hrf_JulDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="JulDay" onchange="MonthChanged(this, 'JulDay')">
+                                                    }
+                                                    
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-check" style="width:140px;">
+                                            <div class="checkbox_main">
+                                                <label class="select_m">
+                                                    @if (Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Month == 8).Count() > 0)
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Aug <a href="javascript:ExpandDay('AugDay');" id="hrf_AugDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="AugDay" onchange="MonthChanged(this, 'AugDay')" checked="checked">
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Aug <a style="display:none;" href="javascript:ExpandDay('AugDay');" id="hrf_AugDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="AugDay" onchange="MonthChanged(this, 'AugDay')">
+                                                    }
+                                                    
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-check" style="width:140px;">
+                                            <div class="checkbox_main">
+                                                <label class="select_m">
+                                                    @if (Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Month == 9).Count() > 0)
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Sept <a style="display:none;" href="javascript:ExpandDay('SeptDay');" id="hrf_SeptDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="SeptDay" onchange="MonthChanged(this, 'SeptDay')" checked="checked">
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Sept <a style="display:none;" href="javascript:ExpandDay('SeptDay');" id="hrf_SeptDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="SeptDay" onchange="MonthChanged(this, 'SeptDay')">
+                                                    }
+                                                    
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-check" style="width:140px;">
+                                            <div class="checkbox_main">
+                                                <label class="select_m">
+                                                    @if (Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Month == 10).Count() > 0)
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Oct <a href="javascript:ExpandDay('OctDay');" id="hrf_OctDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="OctDay" onchange="MonthChanged(this, 'OctDay')" checked="checked">
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Oct <a style="display:none;" href="javascript:ExpandDay('OctDay');" id="hrf_OctDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="OctDay" onchange="MonthChanged(this, 'OctDay')">
+                                                    }
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-check" style="width:140px;">
+                                            <div class="checkbox_main">
+                                                <label class="select_m">
+                                                    @if (Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Month == 11).Count() > 0)
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Nov <a href="javascript:ExpandDay('NovDay');" id="hrf_NovDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="NovDay" onchange="MonthChanged(this, 'NovDay')" checked="checked">
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Nov <a style="display:none;" href="javascript:ExpandDay('NovDay');" id="hrf_NovDay" title="Edit days" class="edit_a">
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="NovDay" onchange="MonthChanged(this, 'NovDay')">
+                                                    }
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-check" style="width:140px;">
+                                            <div class="checkbox_main">
+                                                <label class="select_m">
+                                                    @if (Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Month == 12).Count() > 0)
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Dec <a href="javascript:ExpandDay('DecDay');" id="hrf_DecDay" title="Edit days" class="edit_a">
+                                                                @*<img style="width:15px;" src="/images/edit.svg">*@
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="DecDay" onchange="MonthChanged(this, 'DecDay')" checked="checked">
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="chkbox_txt">
+                                                            Dec <a style="display:none;" href="javascript:ExpandDay('DecDay');" id="hrf_DecDay" title="Edit days" class="edit_a">
+                                                                @*<img style="width:15px;" src="/images/edit.svg">*@
+                                                                - Edit days
+                                                            </a>
+                                                        </span>
+                                                        <input type="checkbox" class="checkbox" value="DecDay" onchange="MonthChanged(this, 'DecDay')">
+                                                    }
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @{ 
+                                int DayCount = 0;
+                            }
+                            @for (int i = 1; i <= 12; i++)
+                            {
+                                int DayTotal = 0;
+                                string MonthName = string.Empty;
+
+                                switch (i)
+                                {
+                                    case 1:
+                                        DayTotal = 31;
+                                        MonthName = "Jan";
+                                        break;
+                                    case 2:
+                                        DayTotal = 29;
+                                        MonthName = "Feb";
+                                        break;
+                                    case 3:
+                                        DayTotal = 31;
+                                        MonthName = "Mar";
+                                        break;
+                                    case 4:
+                                        DayTotal = 30;
+                                        MonthName = "Apr";
+                                        break;
+                                    case 5:
+                                        DayTotal = 31;
+                                        MonthName = "May";
+                                        break;
+                                    case 6:
+                                        DayTotal = 30;
+                                        MonthName = "Jun";
+                                        break;
+                                    case 7:
+                                        DayTotal = 31;
+                                        MonthName = "Jul";
+                                        break;
+                                    case 8:
+                                        DayTotal = 31;
+                                        MonthName = "Aug";
+                                        break;
+                                    case 9:
+                                        DayTotal = 30;
+                                        MonthName = "Sept";
+                                        break;
+                                    case 10:
+                                        DayTotal = 31;
+                                        MonthName = "Oct";
+                                        break;
+                                    case 11:
+                                        DayTotal = 30;
+                                        MonthName = "Nov";
+                                        break;
+                                    case 12:
+                                        DayTotal = 31;
+                                        MonthName = "Dec";
+                                        break;
+                                }
+                                
+                                <div class="collapse-days" id="@(MonthName)Day" style="display:@(Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Month == i).Count() > 0 ? "Block":"none");">
+                                    <a href="#cl-@(MonthName)Day" class="btn btn-select" data-toggle="collapse">Select Days for @(MonthName)</a>
+                                    <div id="cl-@(MonthName)Day" class="@(Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Month == i).Count() > 0 ? "collapse show":"collapse")">
+                                        <div class="chk_box_hr">
+                                            @for (int j = 1; j <= DayTotal; j++)
+                                            {
+                                                <div class="form-check">
+                                                    <div class="checkbox_main">
+                                                        <label class="select_m">
+                                                            <span class="chkbox_txt"> @j </span>
+                                                            @if (Model.indexMonthlyView != null && Model.indexMonthlyView.Count > 0 && Model.indexMonthlyView.Where(n => n.monthDay.Day == j && n.monthDay.Month == i).Count() > 0)
+                                                            {
+                                                                <input type="checkbox" id="indexMonthlyView_@(DayCount)__monthDay" name="indexMonthlyView[@(DayCount)].monthDay" value="1900-@(i)-@(j) 00:00:00" checked="checked">
+                                                            }
+                                                            else
+                                                            {
+                                                                <input type="checkbox" id="indexMonthlyView_@(DayCount)__monthDay" name="indexMonthlyView[@(DayCount)].monthDay" value="1900-@(i)-@(j) 00:00:00">
+                                                            }
+                                                            <span class="checkmark"></span>
+                                                            <input type="hidden" name="indexMonthlyView[@(DayCount)].dataSetIndexId" id="indexMonthlyView_@(DayCount)__dataSetIndexId" value="@ViewBag.dataSetIndexId" />
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                DayCount = DayCount + 1;
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="btns">
+                                <button type="submit" id="btnsavemonthly" class="save_btn" style="display:@(Model.indexMonthlyView.Where(n=>n.id != 0).ToList().Count > 0 ? "block" : "none");">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
