@@ -78,15 +78,15 @@
                 <div class="edit_form">
                     <div class="form-group">
                         @if (Model.viewMachinesPatch.isDatabase == true)
-        {
-                @Html.RadioButtonFor(m => m.viewMachinesPatch.isDatabase, false, false) <label class="name_lbl"> Server </label>
-                @Html.RadioButtonFor(m => m.viewMachinesPatch.isDatabase, true, true) <label class="name_lbl"> Database </label>
-}
-else
-{
-                @Html.RadioButtonFor(m => m.viewMachinesPatch.isDatabase, false, true) <label class="name_lbl"> Server </label>
-                @Html.RadioButtonFor(m => m.viewMachinesPatch.isDatabase, true, false) <label class="name_lbl"> Database </label>
-}
+                        {
+                                @Html.RadioButtonFor(m => m.viewMachinesPatch.isDatabase, false, false) <label class="name_lbl"> Server </label>
+                                @Html.RadioButtonFor(m => m.viewMachinesPatch.isDatabase, true, true) <label class="name_lbl"> Database </label>
+                        }
+                        else
+                        {
+                                @Html.RadioButtonFor(m => m.viewMachinesPatch.isDatabase, false, true) <label class="name_lbl"> Server </label>
+                                @Html.RadioButtonFor(m => m.viewMachinesPatch.isDatabase, true, false) <label class="name_lbl"> Database </label>
+                        }
                     </div>
                     <div class="form-group">
                         <label class="name_lbl text1"> Computer Name </label>
