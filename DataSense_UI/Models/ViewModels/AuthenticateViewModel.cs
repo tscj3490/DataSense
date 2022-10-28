@@ -66,8 +66,7 @@ namespace DataSense_UI.Models.ViewModels
 
             httpreq.accessToken = token.token;
             httpreq.endPoint = userProfileEndPoint;
-            //httpreq.
-
+           
             resp = await api.getAsync(httpreq);
             if (!resp.IsSuccessStatusCode)
             {
@@ -79,7 +78,6 @@ namespace DataSense_UI.Models.ViewModels
             GenericResp genId = JsonConvert.DeserializeObject<GenericResp>(val);
 
             UserSession.SetLoginValues(currentSession, apikey.apiKey, token.token, Convert.ToInt32(genId.id));
-
 
             return isSuccess;
         }
@@ -120,13 +118,13 @@ namespace DataSense_UI.Models.ViewModels
 
         public async Task ResetPassword(HttpSessionStateBase currentSession, ResetPassword objResetPassword)
         {
-            UpdatePasswordPost objUpdatePasswordPost = new UpdatePasswordPost();
-            objUpdatePasswordPost.updatedPassword = objResetPassword.newPassWord;
-            objUpdatePasswordPost.emailAddress = objResetPassword.emailAddress;
-
             HttpGetObject objHttpObject = new HttpGetObject();
             objHttpObject.endPoint = resetpasswordEndPoint;
             objHttpObject.accessToken = objResetPassword.resetCode;
+
+            UpdatePasswordPost objUpdatePasswordPost = new UpdatePasswordPost();
+            objUpdatePasswordPost.updatedPassword = objResetPassword.newPassWord;
+            objUpdatePasswordPost.emailAddress = objResetPassword.emailAddress;
 
             APIClient apiclient = new APIClient();
             HttpResponseMessage dsResp = await apiclient.postAsync(objHttpObject, apiclient.convertToContent(objUpdatePasswordPost), true);
@@ -147,6 +145,7 @@ namespace DataSense_UI.Models.ViewModels
             objHttpObject.id = Convert.ToString(UserSession.UserId(currentSession));
             APIClient apiclient = new APIClient();
             HttpResponseMessage usersResp = await apiclient.getAsync(objHttpObject);
+            
             if (!usersResp.IsSuccessStatusCode)
             {
                 errorOccurred = true;

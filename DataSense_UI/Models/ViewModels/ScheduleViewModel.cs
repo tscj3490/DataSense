@@ -41,6 +41,7 @@ namespace DataSense_UI.Models.ViewModels
             objHttpObject.accessToken = accessToken;
             objHttpObject.endPoint = endpointdailyscheduleGet;
             objHttpObject.id = id;
+           
             APIClient apiclient = new APIClient();
             HttpResponseMessage dsResp = await apiclient.getAsync(objHttpObject);
             if (!dsResp.IsSuccessStatusCode)
@@ -97,11 +98,7 @@ namespace DataSense_UI.Models.ViewModels
             }
             string val3 = await dsResp3.Content.ReadAsStringAsync();
             indexMonthlyView = JsonConvert.DeserializeObject<List<IndexMonthlyView>>(val3);
-            //if(indexMonthlyView !=null && indexMonthlyView.Count > 0)
-            //{
-            //    indexMonthlyView.ForEach(n => n.dataSetIndexId = Convert.ToInt32(id));
-            //}
-
+          
             DataSetIndexViewModel objDataSetIndexViewModel = new DataSetIndexViewModel();
             await objDataSetIndexViewModel.dataSetName(currentsession, dataSetId);
             DataSetName = objDataSetIndexViewModel.DataSetName;

@@ -24,7 +24,6 @@ namespace DataSense_UI.Models.ViewModels
         public bool errorOccurred { get; set; }
         public async Task GenerateKeyWordsView(HttpSessionStateBase currentsession, string id,string DatasetId)
         {
-
             dataSetKeyWordViewList = new List<DataSetKeyWord>();
 
             string accessToken = UserSession.accessToken(currentsession);
@@ -46,6 +45,7 @@ namespace DataSense_UI.Models.ViewModels
             await objDataSetIndexViewModel.dataSetName(currentsession, DatasetId);
             DataSetName = objDataSetIndexViewModel.DataSetName;
         }
+        
         public async Task GetDataSet(HttpSessionStateBase currentSession, string dsid, string datasetindexid)
         {
             dataSetKeyWord = new DataSetKeyWord();

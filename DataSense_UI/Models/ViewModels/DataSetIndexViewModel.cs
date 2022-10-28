@@ -15,10 +15,8 @@ namespace DataSense_UI.Models.ViewModels
     {
             
         public List<DataSetIndexView> dataSetIndexViewList { get; set; }
-
         public DataSetIndexPatchView dataSetIndexPatchView { get; set; }
         public DataSetIndexPatch dataSetIndexPatch { get; set; }
-
         public DataSetIndexPostView dataSetIndexPostView { get; set; }
         public bool errorOccurred { get; set; }
         public string DataSetName { get; set; }
@@ -142,7 +140,7 @@ namespace DataSense_UI.Models.ViewModels
             objHttpObject.endPoint = updateDataSetIndexEndPoint;
             objHttpObject.id = Convert.ToString(id);
             dataSetIndexPatchView.id = Convert.ToInt32(objHttpObject.id);
-            //dataSetIndexPatch.id = 0;
+           
             APIClient apiclient = new APIClient();
             HttpResponseMessage dsResp = await apiclient.postAsync(objHttpObject, apiclient.convertToContent(dataSetIndexPatch), true);
             if (!dsResp.IsSuccessStatusCode)
